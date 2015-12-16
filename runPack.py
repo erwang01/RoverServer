@@ -71,7 +71,7 @@ def loopCommand():
                 print(colors.FAIL + "Unsuccessful command execution" + colors.END)
         elif user_input == "a":
             print(colors.GREEN + "Moving the rover left" + colors.END)
-            if sendCom(-speed, speed):
+            if sendCom(speed, -speed):
                 print(colors.GREEN + "Rover Left." + colors.END)
             else:
                 print(colors.FAIL + "Unsuccessful command execution." + colors.END)
@@ -83,7 +83,7 @@ def loopCommand():
                 print(colors.FAIL + "Unsuccessful command execution." + colors.END)
         elif user_input == "d":
             print(colors.GREEN + "Moving the rover right" + colors.END)
-            if sendCom(speed, -speed):
+            if sendCom(-speed, speed):
                 print(colors.GREEN + "Rover right." + colors.END)
             else:
                 print(colors.FAIL + "Unsuccessful command execution." + colors.END)
