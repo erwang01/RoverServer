@@ -1,5 +1,5 @@
 import sys
-import os
+#import os
 import serial
 import time
 from multiprocessing import Process
@@ -13,7 +13,7 @@ def printValidCommands(win):
     win.addstr(7,0,"a: move the rover left")
     win.addstr(8,0,"s: move the rover back")
     win.addstr(9,0,"d: move the rover right")
-    win.addstr(10,0,"Numbers 1 - 5: control the rover's speed where 1 is fastest and 5 is slowest")
+    win.addstr(10,0,"speed: 0-> stop to 5 -> full speed")
     win.addstr(11,0,"Please do not hold down the key.")
 #    win.addstr(9,0,"Please enter your command: ")
     win.refresh()
@@ -48,60 +48,61 @@ def loopCommand(screen):
         screen.refresh()
         screen.addstr("You entered: " + user_input+"\n", curses.A_BOLD)
         if user_input == "q":
-            screen.addstr("Exiting!")
+            screen.addstr("Exiting!", curses.A_STANDOUT)
             return 0
             break;
         elif user_input == "KEY_RESIZE":
-            return 1
-            break;
+            dims = stdscr.getmaxyx()
+            stdscr.resize(dims[0]-3, int(dims[1]/2)-3)
+            win.resize(int(dims[0]/2)-3, int(dims[1]/2))
         elif user_input == "0":
-            screen.addstr("STOP\n")
+            screen.addstr("STOP\n",curses.color_pair(1))
             if sendCom(0, 0):
-                screen.addstr( "Rover successfully stopped.\n")
+                screen.addstr( "Rover successfully stopped.\n", curses.color_pair(2))
             else:
-                screen.addstr("Stop Unsuccessful.\n" )
+                screen.addstr("Stop Unsuccessful.\n", curses.color_pair(1))
             speed = 0
         elif user_input == "w":
-            screen.addstr("Moving the rover forward\n" )
+            screen.addstr("Moving the rover forward\n", curses.color_pair(2))
             if sendCom(speed, speed):
-                screen.addstr("Rover Forward.\n" )
+                screen.addstr("Rover Forward.\n", curses.color_pair(2))
             else:
-                screen.addstr("Unsuccessful command execution\n" )
+                screen.addstr("Unsuccessful command execution\n", curses.color_pair(1))
         elif user_input == "a":
-            screen.addstr("Moving the rover left\n" )
+            screen.addstr("Moving the rover left\n", curses.color_pair(2))
             if sendCom(-speed, speed):
-                screen.addstr("Rover Left.\n" )
+                screen.addstr("Rover Left.\n", curses.color_pair(2))
             else:
-                screen.addstr("Unsuccessful command execution.\n" )
+                screen.addstr("Unsuccessful command execution.\n", curses.color_pair(1))
         elif user_input == "s":
-            screen.addstr("Moving the rover backward\n" )
+            screen.addstr("Moving the rover backward\n", curses.color_pair(3))
             if sendCom(-speed, -speed):
-                screen.addstr( "Rover Back.\n" )
+                screen.addstr( "Rover Back.\n", curses.color_pair(2))
             else:
-                screen.addstr( "Unsuccessful command execution.\n")
+                screen.addstr( "Unsuccessful command execution.\n", curses.color_pair(1))
         elif user_input == "d":
-            screen.addstr( "Moving the rover right\n" )
+            screen.addstr( "Moving the rover right\n", curses.color_pair(2))
             if sendCom(speed, -speed):
-                screen.addstr( "Rover right." )
+                screen.addstr( "Rover right.\n", curses.color_pair(2))
             else:
-                screen.addstr( "Unsuccessful command execution.\n" )
+                screen.addstr( "Unsuccessful command execution.\n", curses.color_pair(1))
         elif user_input == "1":
-            screen.addstr("Speed set to 1\n" )
+            screen.addstr("Speed set to 1\n", curses.color_pair(3))
             speed = 1.5
         elif user_input == "2":
-            screen.addstr( "Speed set to 2\n")
+            screen.addstr( "Speed set to 2\n", curses.color_pair(3))
             speed = 2.5
         elif user_input == "3":
-            screen.addstr( "Speed set to 3\n")
+            screen.addstr( "Speed set to 3\n", curses.color_pair(3))
             speed = 3
         elif user_input == "4":
-            screen.addstr( "Speed set to 4\n")
+            screen.addstr( "Speed set to 4\n", curses.color_pair(3))
             speed = 4
         elif user_input == "5":
-            screen.addstr( "Speed set to 5\n")
+            screen.addstr( "Speed set to 5\n", curses.color_pair(3))
             speed = 5
         else:
-            screen.addstr( "Please enter a valid command.\n")
+            screen.addstr( "Please enter a valid command.\n", curses.color_pair(1))
         screen.refresh()
 
 def watchdog(screen):
@@ -128,29 +129,48 @@ def watchdog(screen):
                 time.sleep(1)
 
             elif comtime < time.time()-2:
-                screen.addstr(colors.FAIL + "lost connection with arduino" + colors.END)
+                screen.addstr("lost connection with arduino\n", curses.color_pair(1))
                 break
-
+            screen.refresh()
             time.sleep(.1)
         sendCom(0,0)
-        print("restarting Arduino Interface, stand by for connection")
+        screen.addstr("restarting Arduino Interface, stand by for connection\n", curses.color_pair(3))
         ser.close()
         ser.open()
 
 def run(stdscr):
-    #clear screen
+    #get screen max y and x values. dims[0] = y dims[1] = x
+    dims = stdscr.getmaxyx()
+    #create instructions screen
+    win = curses.newwin(dims[0],int(dims[1]/2),0, int(dims[1]/2))
+    '''
+    #create Arduino Watchdog screen
+    log = curses.newwin(int(dims[0]/2),int(dims[1]/2),int(dims[0]/2), int(dims[1]/2))
+    log.clear()
+    log.scrollok(True)
+    log.idlok(1)
+    '''
+
+    
+    #resizing screens
+    stdscr.resize(dims[0]-3, int(dims[1]/2)-3)
+    win.resize(int(dims[0]/2)-3, int(dims[1]))
+    #log.resize(int(dims[0]/2)-3, int(dims[1]/2))
+
+    #setup screens
+    win.clear()
+    win.scrollok(True)
+    win.idlok(1)
     stdscr.clear()
     stdscr.scrollok(True)
     stdscr.idlok(1)
-    #get screen max y and x values. dims[0] = y dims[1] = x
-    dims = stdscr.getmaxyx()
-    #create secondary screen
-    win = curses.newwin(dims[0],int(dims[1]/2),0, int(dims[1]/2))
-    win.clear()
-    stdscr.resize(dims[0]-3, int(dims[1]/2))
-    
+
     win.addstr(3,0,"Welcome to the amazing Rover project!\n")
     win.refresh()
+    
+    curses.init_pair(1, curses.COLOR_RED, curses.COLOR_WHITE)
+    curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
+    curses.init_pair(3, curses.COLOR_YELLOW, curses.COLOR_BLACK)    #warnings
     
     printValidCommands(win)
 
@@ -160,14 +180,15 @@ def run(stdscr):
 
     ser.flushInput()
     ser.flushOutput()
-
-#    arduWatch = Process(target = watchdog, args = (stdscr))
-#    arduWatch.start()
+    #log.addstr("Welcome to the amazing Arduino Watchdog!\n")
+    #log.refresh()
+    arduWatch = Process(target = watchdog, args=(stdscr,))
+    arduWatch.start()
 
     loopCommand(stdscr)
     sendCom(0,0)
 
-#    arduWatch.terminate()
+    arduWatch.terminate()
 
     ser.close()
     
