@@ -116,7 +116,8 @@ def loopCommand(screen, watchdog):
             #   print("arduino says:")
                 time.sleep(.1)
             # print arduino output
-                watchdog.addstr(str((ser.readline()).decode()+(ser.readline()).decode()+(ser.readline()).decode()+(ser.readline()).decode()+(ser.readline()).decode()))
+                while (ser.inWaiting()>0):
+                    watchdog.addstr(str((ser.readline()).decode()))
             #   print("arduino done")
                 comtime = time.time()
             #update time
@@ -143,15 +144,15 @@ def run(stdscr):#stdscr is the standard screen
     dims = stdscr.getmaxyx()
     #create instructions screen
     win = curses.newwin(dims[0],int(dims[1]/2),0, int(dims[1]/2))
-    
+
     #create Arduino Watchdog screen
     log = curses.newwin(int(dims[0]/2),int(dims[1]/2),int(dims[0]/2), int(dims[1]/2))
     log.clear()
     log.scrollok(True)
     log.idlok(1)
-    
 
-    
+
+
     #resizing screens
     stdscr.resize(dims[0]-3, int(dims[1]/2)-3)
     win.resize(int(dims[0]/2)-3, int(dims[1]))
@@ -170,19 +171,19 @@ def run(stdscr):#stdscr is the standard screen
 
     win.addstr(3,0,"Welcome to the amazing Rover project!\n")
     win.refresh()
-    
+
     curses.init_pair(1, curses.COLOR_RED, curses.COLOR_WHITE)
     curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
     curses.init_pair(3, curses.COLOR_YELLOW, curses.COLOR_BLACK)    #warnings
-    
+
     printValidCommands(win)
 
     ser.flushInput()
     ser.flushOutput()
     log.addstr("Welcome to the amazing Arduino Watchdog!\n")
     log.refresh()
-    
-    while loopCommand(log, stdscr):# loopCommand exits as 1 when screen size changes. 
+
+    while loopCommand(log, stdscr):# loopCommand exits as 1 when screen size changes.
         dims = stdscr.getmaxyx()#gets new screen size
         stdscr.resize(dims[0]-3, int(dims[1]/2)-3)#resize windows
         win.resize(int(dims[0]/2)-3, int(dims[1]/2))
@@ -203,7 +204,8 @@ print("begin")
 time.sleep(1)
 #Init serial
 #ser = serial.Serial('/dev/ttyAMA0', baudrate = 9600)   #for raspberry pi
-ser = serial.Serial('/dev/tty.Bluetooth-Incoming-Port', baudrate = 9600)    #for mac
+#ser = serial.Serial('/dev/tty.Bluetooth-Incoming-Port', baudrate = 9600)    #for mac empty testing
+ser = serial.Serial('/dev/cu.usbserial-AM01VDHP') #for mac testing on robot
 
 #Initiate Curses Wrapper, Init Library, cbreak, echoOff, keypadOn
 #runs the run method in curses
