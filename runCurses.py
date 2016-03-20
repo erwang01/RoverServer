@@ -52,9 +52,8 @@ def loopCommand(screen):
             return 0
             break;
         elif user_input == "KEY_RESIZE":
-            dims = stdscr.getmaxyx()
-            stdscr.resize(dims[0]-3, int(dims[1]/2)-3)
-            win.resize(int(dims[0]/2)-3, int(dims[1]/2))
+            return 1
+            break
         elif user_input == "0":
             screen.addstr("STOP\n",curses.color_pair(1))
             if sendCom(0, 0):
@@ -118,7 +117,9 @@ def watchdog(screen):
         print("Second line", end="\n")
         '''
         comtime = time.time()
+        cursor = screen.getyx()
         while(1):
+            screen.move(cursor[0],cursor[1])
             if ser.inWaiting() > 0:
             #   print("arduino says:")
                 time.sleep(.1)
@@ -131,6 +132,7 @@ def watchdog(screen):
             elif comtime < time.time()-2:
                 screen.addstr("lost connection with arduino\n", curses.color_pair(1))
                 break
+            cursor = screen.getyx()
             screen.refresh()
             time.sleep(.1)
         sendCom(0,0)
@@ -143,19 +145,19 @@ def run(stdscr):
     dims = stdscr.getmaxyx()
     #create instructions screen
     win = curses.newwin(dims[0],int(dims[1]/2),0, int(dims[1]/2))
-    '''
+    
     #create Arduino Watchdog screen
     log = curses.newwin(int(dims[0]/2),int(dims[1]/2),int(dims[0]/2), int(dims[1]/2))
     log.clear()
     log.scrollok(True)
     log.idlok(1)
-    '''
+    
 
     
     #resizing screens
     stdscr.resize(dims[0]-3, int(dims[1]/2)-3)
     win.resize(int(dims[0]/2)-3, int(dims[1]))
-    #log.resize(int(dims[0]/2)-3, int(dims[1]/2))
+    log.resize(int(dims[0]/2)-3, int(dims[1]/2))
 
     #setup screens
     win.clear()
@@ -174,18 +176,22 @@ def run(stdscr):
     
     printValidCommands(win)
 
- #   filePath = os.path.dirname(os.path.abspath(__file__)) + "/"
-
-#   ser = serial.Serial('/dev/ttyAMA0', baudrate = 9600)
-
     ser.flushInput()
     ser.flushOutput()
-    #log.addstr("Welcome to the amazing Arduino Watchdog!\n")
-    #log.refresh()
+    log.addstr("Welcome to the amazing Arduino Watchdog!\n")
+    log.refresh()
     arduWatch = Process(target = watchdog, args=(stdscr,))
     arduWatch.start()
-
-    loopCommand(stdscr)
+    while loopCommand(log):
+        dims = stdscr.getmaxyx()
+        stdscr.resize(dims[0]-3, int(dims[1]/2)-3)
+        win.resize(int(dims[0]/2)-3, int(dims[1]/2))
+        log.resize(int(dims[0]/2)-3, int(dims[1]/2))
+        stdscr.clear()
+        win.clear()
+        log.clear()
+        printValidCommands(win)
+        loopCommand(log)
     sendCom(0,0)
 
     arduWatch.terminate()
