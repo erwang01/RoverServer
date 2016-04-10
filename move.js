@@ -16,10 +16,18 @@ serialPort.on("open", function () {
     console.log('data received: ' + data);
 
   });
-/*
-  serialPort.write(new Buffer('4','ascii'), function(err, results) {
-    console.log('err ' + err);
-    console.log('results ' + results);
-  });
-  */
+
 });
+
+function write(valueL, valueR) {
+    resultLeft = valueL*80;
+    resultRight = valueR*80;
+    if valueL == 0:
+        resultLeft = 0;
+    if valueR == 0:
+        resultRight = 0;
+    if serialPort.write(new Buffer(resultLeft + ',' +resultRight+ '/n','utf8'), function(err, results) {
+      console.log('err ' + err);
+      console.log('results ' + results);
+    });
+}
