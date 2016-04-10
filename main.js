@@ -1,8 +1,11 @@
 /* Socket.io Library: http://socket.io/ */
 
-var app = require('express')();
+var express = require('express');
+var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+
+app.use(express.static('web'));
 
 app.get('/', function(req, res){
     res.sendFile(__dirname + "/web/index.html");
