@@ -16,17 +16,16 @@ serialPort.on("open", function () {
     console.log('data received: ' + data);
 
   });
-
 });
 
 function write(valueL, valueR) {
     resultLeft = valueL*80;
     resultRight = valueR*80;
-    if valueL == 0:
+    if (valueL == 0)
         resultLeft = 0;
-    if valueR == 0:
+    if (valueR == 0)
         resultRight = 0;
-    if serialPort.write(new Buffer(resultLeft + ',' +resultRight+ '/n','utf8'), function(err, results) {
+    serialPort.write(new Buffer(resultLeft + ',' +resultRight+ '/n','utf8'), function(err, results) {
       console.log('err ' + err);
       console.log('results ' + results);
     });
