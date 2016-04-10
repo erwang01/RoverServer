@@ -22,6 +22,10 @@ io.on("connection", function(socket){
         io.emit("someData", "Data received: " + data); // note: Use socket.broadcast.emit to send to everyone but sender.
     });
 
+    socket.on("serialOut", function(data) {
+      io.emit("serialOut", data)
+    })
+
     socket.on("disconnect", function(){
         console.log("User Disconnected");
     });

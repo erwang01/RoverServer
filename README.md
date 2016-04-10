@@ -1,3 +1,3 @@
 # RoverServer
 Raspberry Pi end of Project Rover
-Curses Script for controlling rover via ssh connections
+Creates a web interface to drive the rover. Uses node for arduino raspberry pi connections
