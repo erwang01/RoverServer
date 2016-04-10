@@ -111,16 +111,19 @@ def loopCommand(screen, watchdog):
                 screen.addstr( "Please enter a valid command.\n", curses.color_pair(1))
             screen.refresh()
         #if no key entered, check arduino status
+        # -----------WATCHDOG--------------------------
         except curses.error:
             if ser.inWaiting() > 0:
             #   print("arduino says:")
                 time.sleep(.1)
             # print arduino output
                 while (ser.inWaiting()>0):
-                    watchdog.addstr(str((ser.readline()).decode()))
+                    watchdog.addstr(str((ser.readline()).decode('utf-8','strict')))
+                    watchdog.addstr("Testing", curses.A_STANDOUT)
+                    #watchdog.addstr(str((ser.readline(), 'utf-8')))
             #   print("arduino done")
-                comtime = time.time()
             #update time
+                comtime = time.time()
                 ser.write(b' ')
 
             elif comtime < time.time()-2:#if time without communications > 2 seconds
@@ -201,11 +204,11 @@ def run(stdscr):#stdscr is the standard screen
 #
 #
 print("begin")
-time.sleep(1)
 #Init serial
 #ser = serial.Serial('/dev/ttyAMA0', baudrate = 9600)   #for raspberry pi
 #ser = serial.Serial('/dev/tty.Bluetooth-Incoming-Port', baudrate = 9600)    #for mac empty testing
-ser = serial.Serial('/dev/cu.usbserial-AM01VDHP') #for mac testing on robot
+ser = serial.Serial('/dev/cu.usbserial-AM01VDHP', baudrate = 9600) #for mac testing on robot
+time.sleep(1)
 
 #Initiate Curses Wrapper, Init Library, cbreak, echoOff, keypadOn
 #runs the run method in curses
