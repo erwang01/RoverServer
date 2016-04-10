@@ -6,6 +6,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 app.use(express.static('web'));
+app.use(express.static('node_modules/material-design-lite'));
 
 app.get('/', function(req, res){
     res.sendFile(__dirname + "/web/index.html");
