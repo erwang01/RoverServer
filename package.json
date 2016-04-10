@@ -1,0 +1,21 @@
+{
+  "name": "roverserver",
+  "version": "1.0.0",
+  "description": "Raspberry Pi end of Project Rover Curses Script for controlling rover via ssh connections",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erwang01/RoverServer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/erwang01/RoverServer/issues"
+  },
+  "homepage": "https://github.com/erwang01/RoverServer#readme",
+  "dependencies": {
+    "serialport": "^2.0.7-beta5"
+  }
+}
