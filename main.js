@@ -27,28 +27,33 @@ io.on("connection", function(socket){
     })
 
     socket.on("serialIn", function(data) {
-      switch(data.substring(0, data.indexOf(':')+1) {
-        case "Status:":
-          io.emit("Status", data.substring(data.indexOf(':' +1)))
-          break
-        case "M1 current:":
-          io.emit("M1Current", data.substring(data.indexOf(':' +1)))
-          break
-        case "M2 current:":
-          io.emit("M2Current", data.substring(data.indexOf(':' +1)))
-          break
-        case "Deg C:":
-          io.emit("Temp", data.substring(data.indexOf(':' +1)))
-          break
-        case "M1:":
-          io.emit("M1", data.substring(data.indexOf(':' +1)))
-          break
-        case "M2:":
-          io.emit("M2", data.substring(data.indexOf(':' +1)))
-          break
-        default:
-          io.emit("Log", data)
-          break
+      if (data.indexOf(':') !== -1){
+        switch(data.substring(0, data.indexOf(':')+1)) {
+          case "Status:":
+            io.emit("Status", data.substring(data.indexOf(':' +1)))
+            break
+          case "M1 current:":
+            io.emit("M1Current", data.substring(data.indexOf(':' +1)))
+            break
+          case "M2 current:":
+            io.emit("M2Current", data.substring(data.indexOf(':' +1)))
+            break
+          case "Deg C:":
+            io.emit("Temp", data.substring(data.indexOf(':' +1)))
+            break
+          case "M1:":
+            io.emit("M1", data.substring(data.indexOf(':' +1)))
+            break
+          case "M2:":
+            io.emit("M2", data.substring(data.indexOf(':' +1)))
+            break
+          default:
+            io.emit("Log", data)
+            break
+        }
+      }
+      else {
+        io.emit("Log", data)
       }
     })
 
