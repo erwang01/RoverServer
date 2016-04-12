@@ -6,7 +6,10 @@ var serialPort = new SerialPort('/dev/cu.usbserial-AM01VDHP', {
   parity: 'none',
   stopBits: 1,
   flowControl: false,
-  parser: SerialPortLib.parsers.readline("\r\n")
+  parser: SerialPortLib.parsers.readline("\r\n"),
+  function(error) {
+    console.log("err " + error);
+  }
 });
 var socket = require('socket.io-client')('http://localhost:3000');
 
@@ -18,21 +21,39 @@ serialPort.on("open", function () {
     console.log('data received: ' + data);
     socket.emit('serialIn', data)
   });
-});
 
-serialPort.on('close', function() {
-  socket.emit('serialIn', 'SerialPort: closed')
-  console.log('Serial Port closed')
-})
+  serialPort.on('close', function(error) {
+    socket.emit('serialIn', 'SerialPort: closed')
+    console.log('Serial Port closed')
+    if (error !== undefined) {
+      console.log('error '+ error)
+    }
+  });
+
+  serialPort.on('disconnect', function(error) {
+    socket.emit('serialIn', 'SerialPort: Disconnected')
+    console.log('Serial Port Disconnected')
+    if (error !== undefined) {
+      console.log('error '+ error)
+    }
+  })
+});
 
 socket.on('connect', function(){
   console.log("Connected")
 });
 socket.on('serialOut', function(data) {
-  write(data.valueL, data.valueR)
-})
+  if(serialPort.isOpen()) {
+    write(data.valueL, data.valueR)
+  }
+  else {
+    socket.emit('serialIn', 'Error: Unable to send command, Serial Port closed')
+  }
+});
 socket.on('disconnect', function(){
   console.log("Disconnected")
+  write(0,0);
+  serialPort.close();
 });
 
 function write(valueL, valueR) {
