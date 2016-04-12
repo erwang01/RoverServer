@@ -1,9 +1,11 @@
 
 <div class="mdl-grid">
-    <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet">
-        Half of the page
-    </div>
-    <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet">
-        Half of the page
+    <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--3-offset">
+        <img src="{{ rover_feed_source }}">
+        <ul>
+            <li *ngFor="#log of logs">
+                {{ #log }}
+            </li>
+        </ul>
     </div>
 </div>

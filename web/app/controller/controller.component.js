@@ -20,22 +20,21 @@ System.register(["angular2/core"], function(exports_1, context_1) {
         execute: function() {
             ControllerComponent = (function () {
                 function ControllerComponent() {
+                    this.logs = [];
                 }
                 ControllerComponent.prototype.ngAfterViewInit = function () {
                     componentHandler.upgradeDom();
                     var socket = io();
+                    var _this = this;
                     socket.on("connect", function () {
                         console.log("Connected!");
                     });
                     socket.on("disconnect", function () {
                         console.log("Disconnected!");
                     });
-                    socket.on("someData", function (data) {
-                        console.log("Data received: " + data);
+                    socket.on("log", function (log) {
+                        _this.logs.push(log);
                     });
-                    setTimeout(function () {
-                        socket.emit("channelName", "Some data from client that should come back to this client.");
-                    }, 1000);
                 };
                 ControllerComponent = __decorate([
                     core_1.Component({

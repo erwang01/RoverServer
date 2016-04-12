@@ -4,10 +4,14 @@ import {Component} from "angular2/core";
     templateUrl: "app/controller/controller.component.html"
 })
 export class ControllerComponent {
+    roverFeedSource: string;
+    logs: string[] = [];
+
     ngAfterViewInit() {
         componentHandler.upgradeDom();
 
         var socket = io();
+        var _this = this;
 
         socket.on("connect", function() {
             console.log("Connected!");
@@ -16,12 +20,8 @@ export class ControllerComponent {
             console.log("Disconnected!");
         });
 
-        socket.on("someData", function(data) {
-            console.log("Data received: " + data);
+        socket.on("log", function(log) {
+            _this.logs.push(log);
         });
-
-        setTimeout(function() {
-            socket.emit("channelName", "Some data from client that should come back to this client.");
-        }, 1000);
     }
 }
