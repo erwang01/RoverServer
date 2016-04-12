@@ -1,11 +1,15 @@
 var SerialPortLib = require("serialport");
 var SerialPort = SerialPortLib.SerialPort;
 //list of serialPorts to check for validity, listed by priority
-var serialPorts = ["/dev/ttyAMA0", "/dev/cu.usbserial-AM01VDHP"];
+var serialPorts = ["/dev/cu.usbserial-AM01VDHP", "/dev/ttyAMA0"];
 SerialPortLib.list(function(err, ports) {
-  ports.forEach(function(port) {
+  for ( i = 0; i < ports.length; i ++){
+    var port = ports[i];
     console.log(port.comName);
-    serialPorts.forEach( function(item, index, array) {
+    for (j = 0; j < serialPorts.length; j ++) {
+      item = serialPorts[j];
+      console.log(item)
+
       if (port.comName === item) {
         var serialPort = new SerialPort(item, {
           baudRate: 9600,
@@ -25,9 +29,10 @@ SerialPortLib.list(function(err, ports) {
               onReady(serialPort)
             }
         });
+        break;
       }
-    });
-  });
+    };
+  };
 });
 var socket = require('socket.io-client')('http://localhost:3000');
 
