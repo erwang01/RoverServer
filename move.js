@@ -1,30 +1,52 @@
 var SerialPortLib = require("serialport");
 var SerialPort = SerialPortLib.SerialPort;
-var serialPort = new SerialPort('/dev/cu.usbserial-AM01VDHP', {  //For MAC
-//var serialPort = new SerialPort('/dev/ttyAMA0', {       //For Raspberry Pi
-  baudRate: 9600,
-  dataBits: 8,
-  parity: 'none',
-  stopBits: 1,
-  flowControl: false,
-  parser: SerialPortLib.parsers.readline("\r\n"),
-  function(error) {
-    console.log("err " + error);
-  }
+//list of serialPorts to check for validity, listed by priority
+var serialPorts = ["/dev/ttyAMA0", "/dev/cu.usbserial-AM01VDHP"];
+SerialPortLib.list(function(err, ports) {
+  ports.forEach(function(port) {
+    console.log(port.comName);
+    serialPorts.forEach( function(item, index, array) {
+      if (port.comName === item) {
+        var serialPort = new SerialPort(item, {
+          baudRate: 9600,
+          dataBits: 8,
+          parity: 'none',
+          stopBits: 1,
+          flowControl: false,
+          parser: SerialPortLib.parsers.readline("\r\n")
+        },function(error) {
+          //if port does not exist, error will be thrown.
+            if (error !== undefined) {
+              console.log("err " + error);
+              process.exit(1);
+            }
+            else {
+              console.log('Opened successfully')
+              onReady(serialPort)
+            }
+        });
+      }
+    });
+  });
 });
 var socket = require('socket.io-client')('http://localhost:3000');
 
-serialPort.on("open", function () {
-  //log Serial Port status and open ports
-  console.log('Serial Port opened');
-  serialPort.list(function (err, ports) {
-    ports.forEach(function(port) {
-      console.log(port.comName);
-      console.log(port.pnpId);
-      console.log(port.manufacturer);
-    });
+//call when serial port is opened
+function onReady(serialPort) {
+  //stop program if Serial Port still has no port opened
+  if (serialPort === undefined) {
+    console.log("No serialPort opened")
+    process.exit(1);
+  }
+  else if (serialPort.isOpen()) {
+    console.log("serialPort opened")
+    socket.emit('serialIn', 'SerialPort: opened')
+  }
+  serialPort.on("open", function () {
+    //log Serial Port status
+    console.log('Serial Port opened');
+    socket.emit('serialIn', 'SerialPort: opened')
   });
-  socket.emit('serialIn', 'SerialPort: opened')
 
   //reads lines of Serial input data
   serialPort.on('data', function(data) {
@@ -49,7 +71,8 @@ serialPort.on("open", function () {
       console.log('error '+ error)
     }
   })
-});
+}
+
 
 //log socket connect
 socket.on('connect', function(){
@@ -95,7 +118,7 @@ function write(valueL, valueR) {
     else if (resultRight<-400) {
       resultRight = -400;
     }
-    
+
     serialPort.write(resultLeft + ',' +resultRight+ '/n', function(err, results) {
       console.log('err ' + err);
       console.log('results ' + results);
