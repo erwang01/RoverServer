@@ -50,6 +50,7 @@ io.on("connection", function(socket){
       else {
         io.emit("log", data)
       }
+      console.log(data)
     })
 
     socket.on("disconnect", function(){

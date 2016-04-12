@@ -16,7 +16,7 @@ serialPort.on("open", function () {
 
   serialPort.on('data', function(data) {
     console.log('data received: ' + data);
-    socket.emit('serialIn, data')
+    socket.emit('serialIn', data)
   });
 });
 
