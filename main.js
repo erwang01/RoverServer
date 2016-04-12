@@ -30,23 +30,25 @@ io.on("connection", function(socket){
       if (data.indexOf(':') !== -1){
         switch(data.substring(0, data.indexOf(':')+1)) {
           case "Status:":
-            io.emit("Status", data.substring(data.indexOf(':' +1)))
+            io.emit("Status", data.substring(data.indexOf(':')+1))
             break
           case "M1 current:":
-            io.emit("M1Current", data.substring(data.indexOf(':' +1)))
+            io.emit("M1Current", data.substring(data.indexOf(':')+1))
             break
           case "M2 current:":
-            io.emit("M2Current", data.substring(data.indexOf(':' +1)))
+            io.emit("M2Current", data.substring(data.indexOf(':')+1))
             break
           case "Deg C:":
-            io.emit("Temp", data.substring(data.indexOf(':' +1)))
+            io.emit("Temp", data.substring(data.indexOf(':')+1))
             break
           case "M1:":
-            io.emit("M1", data.substring(data.indexOf(':' +1)))
+            io.emit("M1", data.substring(data.indexOf(':')+1))
             break
           case "M2:":
-            io.emit("M2", data.substring(data.indexOf(':' +1)))
+            io.emit("M2", data.substring(data.indexOf(':')+1))
             break
+          case "SerialPort:":
+            io.emit("SerialPort", data.substring(data.indexOf(':')+1))
           default:
             io.emit("Log", data)
             break
