@@ -1,4 +1,4 @@
-System.register(["angular2/core"], function(exports_1, context_1) {
+System.register(["../services/socket.service", "angular2/core"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,38 +10,38 @@ System.register(["angular2/core"], function(exports_1, context_1) {
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1;
+    var socket_service_1, core_1;
     var ControllerComponent;
     return {
         setters:[
+            function (socket_service_1_1) {
+                socket_service_1 = socket_service_1_1;
+            },
             function (core_1_1) {
                 core_1 = core_1_1;
             }],
         execute: function() {
             ControllerComponent = (function () {
-                function ControllerComponent() {
+                function ControllerComponent(_socketService) {
+                    this._socketService = _socketService;
                     this.roverFeedSource = "http://192.168.15.149/html/cam_pic_new.php";
-                    this.logs = [];
+                    this.socket = this._socketService.getSocket();
                 }
                 ControllerComponent.prototype.ngAfterViewInit = function () {
                     componentHandler.upgradeDom();
-                    var socket = io();
                     var _this = this;
-                    socket.on("connect", function () {
+                    this.socket.on("connect", function () {
                         console.log("Connected!");
                     });
-                    socket.on("disconnect", function () {
+                    this.socket.on("disconnect", function () {
                         console.log("Disconnected!");
-                    });
-                    socket.on("log", function (log) {
-                        _this.logs.push(log);
                     });
                 };
                 ControllerComponent = __decorate([
                     core_1.Component({
                         templateUrl: "app/controller/controller.component.html"
                     }), 
-                    __metadata('design:paramtypes', [])
+                    __metadata('design:paramtypes', [socket_service_1.SocketService])
                 ], ControllerComponent);
                 return ControllerComponent;
             }());

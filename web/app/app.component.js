@@ -1,4 +1,4 @@
-System.register(["./controller/controller.component", 'angular2/core', "angular2/router"], function(exports_1, context_1) {
+System.register(["./services/socket.service", "./controller/controller.component", 'angular2/core', "angular2/router"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,10 +10,13 @@ System.register(["./controller/controller.component", 'angular2/core', "angular2
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var controller_component_1, core_1, router_1;
+    var socket_service_1, controller_component_1, core_1, router_1;
     var AppComponent;
     return {
         setters:[
+            function (socket_service_1_1) {
+                socket_service_1 = socket_service_1_1;
+            },
             function (controller_component_1_1) {
                 controller_component_1 = controller_component_1_1;
             },
@@ -25,10 +28,14 @@ System.register(["./controller/controller.component", 'angular2/core', "angular2
             }],
         execute: function() {
             AppComponent = (function () {
-                function AppComponent(router) {
+                function AppComponent(router, socketService) {
                     this.router = router;
+                    this.socketService = socketService;
+                    this.connected = false;
                 }
                 AppComponent.prototype.ngOnInit = function () {
+                    this.socketService.connect();
+                    this.socket = this.socketService.getSocket();
                     $("body .mdl-navigation__link").click(function () {
                         var d = document.querySelector('.mdl-layout');
                         d.MaterialLayout.toggleDrawer();
@@ -36,14 +43,19 @@ System.register(["./controller/controller.component", 'angular2/core', "angular2
                 };
                 AppComponent.prototype.ngAfterViewInit = function () {
                     componentHandler.upgradeDom();
+                    var _this = this;
+                    this.socket.on("status", function (status) {
+                        _this.connected = status == "connected";
+                    });
                 };
                 AppComponent = __decorate([
                     core_1.Component({
                         selector: "app",
                         templateUrl: "app/app.component.html",
+                        styleUrls: ["app/app.component.css"],
                         directives: [router_1.ROUTER_DIRECTIVES],
                         providers: [
-                            router_1.ROUTER_PROVIDERS
+                            router_1.ROUTER_PROVIDERS, socket_service_1.SocketService
                         ]
                     }),
                     router_1.RouteConfig([
@@ -54,7 +66,7 @@ System.register(["./controller/controller.component", 'angular2/core', "angular2
                             useAsDefault: true
                         }
                     ]), 
-                    __metadata('design:paramtypes', [router_1.Router])
+                    __metadata('design:paramtypes', [router_1.Router, socket_service_1.SocketService])
                 ], AppComponent);
                 return AppComponent;
             }());
