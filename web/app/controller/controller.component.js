@@ -20,6 +20,7 @@ System.register(["angular2/core"], function(exports_1, context_1) {
         execute: function() {
             ControllerComponent = (function () {
                 function ControllerComponent() {
+                    this.roverFeedSource = "http://192.168.15.149/html/cam_pic_new.php";
                     this.logs = [];
                 }
                 ControllerComponent.prototype.ngAfterViewInit = function () {
