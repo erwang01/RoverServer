@@ -93,7 +93,7 @@ socket.on('connect', function(){
 //write to serial
 socket.on('serialOut', function(data) {
   if(serialPort.isOpen()) {
-    write(data.valueL, data.valueR)
+    write(data.valueL, data.valueR, serialPort)
   }
   else {
     socket.emit('serialIn', 'Error: Unable to send command, Serial Port closed')
@@ -108,7 +108,7 @@ socket.on('disconnect', function(){
 
 //write function takes in left and right values to be written to serial.
 //currently accepts speeds between -5 and 5.
-function write(valueL, valueR) {
+function write(valueL, valueR, serialPort) {
     resultLeft = valueL*80;
     resultRight = valueR*80;
     if (valueL == 0)
