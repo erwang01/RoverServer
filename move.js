@@ -12,6 +12,7 @@ SerialPortLib.list(function(err, ports) {
       var port = ports[i];
       console.log(port.comName);
       if (port.comName === item) {
+        console.log("Serial Port " + port.comName + "is a match")
         var serialPort = new SerialPort(item, {
           baudRate: 9600,
           dataBits: 8,
@@ -33,9 +34,12 @@ SerialPortLib.list(function(err, ports) {
         break;
       }
     }
+    console.log("Finished loop of availiable ports")
     if (found) {
+      console.log("entered break statement")
       break;
     }
+    console.log("post-break")
   };
 });
 var socket = require('socket.io-client')('http://localhost:3000');
