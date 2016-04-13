@@ -4,13 +4,13 @@ var SerialPort = SerialPortLib.SerialPort;
 //mac testing(only when plugged in), usb serial(only when plugged in), gpio serial(always present)
 var serialPorts = ["/dev/cu.usbserial-AM01VDHP", "/dev/ttyUSB0", "/dev/ttyAMA0"];
 SerialPortLib.list(function(err, ports) {
-  for ( i = 0; i < ports.length; i ++){
-    var port = ports[i];
-    console.log(port.comName);
-    for (j = 0; j < serialPorts.length; j ++) {
-      item = serialPorts[j];
-      console.log(item)
-
+  var found = false
+  for (j = 0; j < serialPorts.length; j ++) {
+    item = serialPorts[j];
+    console.log(item)
+    for ( i = 0; i < ports.length; i ++){
+      var port = ports[i];
+      console.log(port.comName);
       if (port.comName === item) {
         var serialPort = new SerialPort(item, {
           baudRate: 9600,
@@ -32,7 +32,10 @@ SerialPortLib.list(function(err, ports) {
         });
         break;
       }
-    };
+    }
+    if (found) {
+      break;
+    }
   };
 });
 var socket = require('socket.io-client')('http://localhost:3000');
