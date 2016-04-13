@@ -3,6 +3,7 @@ var SerialPort = SerialPortLib.SerialPort;
 //list of serialPorts to check for validity, listed by priority
 //mac testing(only when plugged in), usb serial(only when plugged in), gpio serial(always present)
 var serialPorts = ["/dev/cu.usbserial-AM01VDHP", "/dev/ttyUSB0", "/dev/ttyAMA0"];
+var serialPort;
 SerialPortLib.list(function(err, ports) {
   var found = false
   for (var j = 0; j < serialPorts.length; j ++) {
@@ -13,7 +14,7 @@ SerialPortLib.list(function(err, ports) {
       console.log(port.comName);
       if (port.comName === item) {
         console.log("Serial Port " + port.comName + "is a match")
-        var serialPort = new SerialPort(item, {
+        serialPort = new SerialPort(item, {
           baudRate: 9600,
           dataBits: 8,
           parity: 'none',
@@ -28,7 +29,7 @@ SerialPortLib.list(function(err, ports) {
             }
             else {
               console.log('Opened successfully')
-              onReady(serialPort)
+              onReady()
             }
         });
         found = true
@@ -43,7 +44,7 @@ SerialPortLib.list(function(err, ports) {
 var socket = require('socket.io-client')('http://localhost:3000');
 
 //call when serial port is opened
-function onReady(serialPort) {
+function onReady() {
   //stop program if Serial Port still has no port opened
   if (serialPort === undefined) {
     console.log("No serialPort opened")
@@ -93,7 +94,7 @@ socket.on('connect', function(){
 //write to serial
 socket.on('serialOut', function(data) {
   if(serialPort.isOpen()) {
-    write(data.valueL, data.valueR, serialPort)
+    write(data.valueL, data.valueR)
   }
   else {
     socket.emit('serialIn', 'Error: Unable to send command, Serial Port closed')
@@ -102,13 +103,15 @@ socket.on('serialOut', function(data) {
 });
 socket.on('disconnect', function(){
   console.log("Disconnected")
-  write(0,0);
+  if(serialPort.isOpen()) {
+    write(0 , 0)
+  }
   serialPort.close();
 });
 
 //write function takes in left and right values to be written to serial.
 //currently accepts speeds between -5 and 5.
-function write(valueL, valueR, serialPort) {
+function write(valueL, valueR) {
     resultLeft = valueL*80;
     resultRight = valueR*80;
     if (valueL == 0)
@@ -131,7 +134,9 @@ function write(valueL, valueR, serialPort) {
     }
 
     serialPort.write(resultLeft + ',' +resultRight+ '/n', function(err, results) {
-      console.log('err ' + err);
-      console.log('results ' + results);
+      if (err !== undefined) {
+        console.log('err ' + err);
+      }
+      console.log('bytes written ' + results);
     });
 }
