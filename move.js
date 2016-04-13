@@ -35,12 +35,9 @@ SerialPortLib.list(function(err, ports) {
         break;
       }
     }
-    console.log("Finished loop of availiable ports")
     if (found) {
-      console.log("entered break statement")
       break;
     }
-    console.log("post-break")
   };
 });
 var socket = require('socket.io-client')('http://localhost:3000');
