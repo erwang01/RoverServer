@@ -5,10 +5,10 @@ var SerialPort = SerialPortLib.SerialPort;
 var serialPorts = ["/dev/cu.usbserial-AM01VDHP", "/dev/ttyUSB0", "/dev/ttyAMA0"];
 SerialPortLib.list(function(err, ports) {
   var found = false
-  for (j = 0; j < serialPorts.length; j ++) {
+  for (var j = 0; j < serialPorts.length; j ++) {
     item = serialPorts[j];
     console.log(item)
-    for ( i = 0; i < ports.length; i ++){
+    for ( var i = 0; i < ports.length; i ++){
       var port = ports[i];
       console.log(port.comName);
       if (port.comName === item) {
