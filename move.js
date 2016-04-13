@@ -32,6 +32,7 @@ SerialPortLib.list(function(err, ports) {
             }
         });
         break;
+        found = true
       }
     }
     console.log("Finished loop of availiable ports")
