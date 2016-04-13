@@ -1,7 +1,8 @@
 var SerialPortLib = require("serialport");
 var SerialPort = SerialPortLib.SerialPort;
 //list of serialPorts to check for validity, listed by priority
-var serialPorts = ["/dev/cu.usbserial-AM01VDHP", "/dev/ttyAMA0"];
+//mac testing(only when plugged in), usb serial(only when plugged in), gpio serial(always present)
+var serialPorts = ["/dev/cu.usbserial-AM01VDHP", "/dev/ttyUSB0", "/dev/ttyAMA0"];
 SerialPortLib.list(function(err, ports) {
   for ( i = 0; i < ports.length; i ++){
     var port = ports[i];
