@@ -30,7 +30,7 @@
         <span class="connected" *ngIf="serialStatus">Connected</span>
         <span class="disconnected" *ngIf="!serialStatus">Disconnected</span>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<!--      <div *ngIf="serialStatus">-->
+      <div *ngIf="serialStatus">
         Arduino Status:
           <span class="connected" *ngIf="connected">Connected</span>
           <span class="disconnected" *ngIf="!connected">Disconnected</span>
@@ -64,6 +64,6 @@
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         Log:
           {{log}}
-<!--      </div>-->
+      </div>
     </footer>
 </div>

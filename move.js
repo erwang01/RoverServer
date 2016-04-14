@@ -4,6 +4,8 @@ var SerialPort = SerialPortLib.SerialPort;
 //mac testing(only when plugged in), usb serial(only when plugged in), gpio serial(always present)
 var serialPorts = ["/dev/cu.usbserial-AM01VDHP", "/dev/ttyUSB0", "/dev/ttyAMA0"];
 var serialPort;
+var d = new Date();
+var time = d.getTime();
 SerialPortLib.list(function(err, ports) {
   var found = false
   for (var j = 0; j < serialPorts.length; j ++) {
@@ -29,6 +31,8 @@ SerialPortLib.list(function(err, ports) {
             }
             else {
               console.log('Opened successfully')
+              updateTime()
+              checkTime()
               onReady()
             }
         });
@@ -40,6 +44,9 @@ SerialPortLib.list(function(err, ports) {
       break;
     }
   };
+  if (!found) {
+    console.log("No serialPort found")
+  }
 });
 var socket = require('socket.io-client')('http://localhost:3000');
 
@@ -62,8 +69,9 @@ function onReady() {
 
   //reads lines of Serial input data
   serialPort.on('data', function(data) {
-    console.log('data received: ' + data);
+    console.log('data received: ' + data)
     socket.emit('serialIn', data)
+    updateTime()
   });
 
   //log serial port closing
@@ -139,4 +147,20 @@ function write(valueL, valueR) {
       }
       console.log('bytes written ' + results);
     });
+}
+
+//called when comms from arduino recievec
+function updateTime() {
+  time = d.getTime();
+}
+
+//this function will always run, acting as a watch dog, stops rover every time connection is lost.
+//also posts this as a serialPort disconnect on the web page
+function checkTime() {
+  while(1) {
+    if (time < d.getTime()-2000) {
+      socket.emit('serialIn', 'SerialPort: Disconnected')
+      write(0,0)
+    }
+  }
 }

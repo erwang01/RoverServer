@@ -68,6 +68,9 @@ System.register(["./services/socket.service", "./controller/controller.component
                         }
                         else if (isFinite(parseInt(data))) {
                             _this.m1Speed = parseInt(data);
+                            if (_this.m1State === "breaks" && _this.m1Speed !== 0) {
+                                _this.m1State = "running";
+                            }
                         }
                         else {
                             _this.m1State = data;
@@ -80,6 +83,9 @@ System.register(["./services/socket.service", "./controller/controller.component
                         }
                         else if (isFinite(parseInt(data))) {
                             _this.m2Speed = parseInt(data);
+                            if (_this.m2State === "breaks" && _this.m2Speed !== 0) {
+                                _this.m2State = "running";
+                            }
                         }
                         else {
                             _this.m2State = data;
