@@ -24,37 +24,46 @@
         <router-outlet></router-outlet>
     </main>
 
+
     <footer class="mdl-mega-footer">
       Serial Status:
         <span class="connected" *ngIf="serialStatus">Connected</span>
         <span class="disconnected" *ngIf="!serialStatus">Disconnected</span>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <div *ngIf="serialStatus">
+<!--      <div *ngIf="serialStatus">-->
         Arduino Status:
           <span class="connected" *ngIf="connected">Connected</span>
           <span class="disconnected" *ngIf="!connected">Disconnected</span>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         M1 Current:
-          <span class="currentSafe" *ngIf="m1Current<30">{{ m1Current }} mA</span>
-          <span class="currentWarning" *ngIf="m1Current<100&&m1Current>=30">{{ m1Current }} mA</span>
-          <span class="currentDanger" *ngIf="m1Current>=100">{{ m1Current }} mA</span>
+          <span class="safe" *ngIf="m1Current<30">{{ m1Current }} mA</span>
+          <span class="warning" *ngIf="m1Current<100&&m1Current>=30">{{ m1Current }} mA</span>
+          <span class="danger" *ngIf="m1Current>=100">{{ m1Current }} mA</span>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         M2 Current:
-          <span class="currentSafe" *ngIf="m2Current<30">{{ m2Current }} mA</span>
-          <span class="currentWarning" *ngIf="m2Current<100&&m2Current>=30">{{ m2Current }} mA</span>
-          <span class="currentDanger" *ngIf="m2Current>=100">{{ m2Current }} mA</span>
+          <span class="safe" *ngIf="m2Current<30">{{ m2Current }} mA</span>
+          <span class="warning" *ngIf="m2Current<100&&m2Current>=30">{{ m2Current }} mA</span>
+          <span class="danger" *ngIf="m2Current>=100">{{ m2Current }} mA</span>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         Temperature:
           {{temp}} &deg;
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        Motor 1:
-          {{m1}}
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        Motor 2:
-          {{m2}}
+        Motor 1 Speed:
+          {{m1Speed}}
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Motor 2 Speed:
+          {{m2Speed}}
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Motor 1 State:
+          <span *ngIf="m1State!==fault">{{ m1state }}</span>
+          <span class="danger" *ngIf="m1State===fault">{{ m1state }}</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Motor 2 State:
+          <span *ngIf="m2State!==fault">{{ m2state }}</span>
+          <span class="danger" *ngIf="m2State===fault">{{ m2state }}</span>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         Log:
           {{log}}
-      </div>
+<!--      </div>-->
     </footer>
 </div>

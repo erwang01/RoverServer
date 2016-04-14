@@ -35,6 +35,8 @@ System.register(["./services/socket.service", "./controller/controller.component
                     this.m1Current = -1;
                     this.m2Current = -1;
                     this.temp = 0;
+                    this.m1Speed = 0;
+                    this.m2Speed = 0;
                     this.serialStatus = false;
                 }
                 AppComponent.prototype.ngOnInit = function () {
@@ -49,25 +51,43 @@ System.register(["./services/socket.service", "./controller/controller.component
                     componentHandler.upgradeDom();
                     var _this = this;
                     this.socket.on("status", function (status) {
-                        _this.arduino = status == "connected";
+                        _this.arduino = status.trim() == "connected";
                     });
                     this.socket.on("M1Current", function (current) {
-                        _this.m1Current = parseFloat(current);
+                        _this.m1Current = parseFloat(current.trim());
                     });
                     this.socket.on("M2Current", function (current) {
-                        _this.m2Current = parseFloat(current);
+                        _this.m2Current = parseFloat(current.trim());
                     });
                     this.socket.on("temp", function (temperature) {
-                        _this.temp = parseFloat(temperature);
+                        _this.temp = parseFloat(temperature.trim());
                     });
                     this.socket.on("M1", function (data) {
-                        _this.m1 = data;
+                        if (data === "breaks" || data === "fault") {
+                            _this.m1State = data;
+                        }
+                        else if (isFinite(parseInt(data))) {
+                            _this.m1Speed = parseInt(data);
+                        }
+                        else {
+                            _this.m1State = data;
+                            console.log("unknown M1 value " + data);
+                        }
                     });
                     this.socket.on("M2", function (data) {
-                        _this.m2 = data;
+                        if (data === "breaks" || data === "fault") {
+                            _this.m2State = data;
+                        }
+                        else if (isFinite(parseInt(data))) {
+                            _this.m2Speed = parseInt(data);
+                        }
+                        else {
+                            _this.m2State = data;
+                            console.log("unknown M2 value " + data);
+                        }
                     });
                     this.socket.on("serialPort", function (status) {
-                        _this.serialStatus = status == "opened";
+                        _this.serialStatus = status.trim() == "opened";
                     });
                     this.socket.on("log", function (logs) {
                         _this.log += logs + "/n";
