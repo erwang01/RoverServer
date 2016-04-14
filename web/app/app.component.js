@@ -31,7 +31,11 @@ System.register(["./services/socket.service", "./controller/controller.component
                 function AppComponent(router, socketService) {
                     this.router = router;
                     this.socketService = socketService;
-                    this.connected = false;
+                    this.arduino = false;
+                    this.m1Current = -1;
+                    this.m2Current = -1;
+                    this.temp = 0;
+                    this.serialStatus = false;
                 }
                 AppComponent.prototype.ngOnInit = function () {
                     this.socketService.connect();
@@ -45,7 +49,28 @@ System.register(["./services/socket.service", "./controller/controller.component
                     componentHandler.upgradeDom();
                     var _this = this;
                     this.socket.on("status", function (status) {
-                        _this.connected = status == "connected";
+                        _this.arduino = status == "connected";
+                    });
+                    this.socket.on("M1Current", function (current) {
+                        _this.m1Current = parseFloat(current);
+                    });
+                    this.socket.on("M2Current", function (current) {
+                        _this.m2Current = parseFloat(current);
+                    });
+                    this.socket.on("temp", function (temperature) {
+                        _this.temp = parseFloat(temperature);
+                    });
+                    this.socket.on("M1", function (data) {
+                        _this.m1 = data;
+                    });
+                    this.socket.on("M2", function (data) {
+                        _this.m2 = data;
+                    });
+                    this.socket.on("serialPort", function (status) {
+                        _this.serialStatus = status == "opened";
+                    });
+                    this.socket.on("log", function (logs) {
+                        _this.log += logs + "/n";
                     });
                 };
                 AppComponent = __decorate([

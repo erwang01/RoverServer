@@ -22,7 +22,14 @@ import {ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteConfig, Router} from "angular2
 ])
 export class AppComponent implements OnInit {
     socket: any;
-    connected: boolean = false;
+    arduino: boolean = false;
+    m1Current: number = -1;
+    m2Current: number = -1;
+    temp: number = 0;
+    m1: any;
+    m2: any;
+    serialStatus: boolean = false;
+    log: string;
 
     constructor(public router: Router, public socketService: SocketService) {}
 
@@ -41,7 +48,36 @@ export class AppComponent implements OnInit {
         var _this = this;
 
         this.socket.on("status", function(status) {
-            _this.connected = status == "connected";
+            _this.arduino = status == "connected";
         })
+
+        this.socket.on("M1Current", function(current) {
+            _this.m1Current = parseFloat(current);
+        })
+
+        this.socket.on("M2Current", function(current) {
+            _this.m2Current = parseFloat(current);
+        })
+
+        this.socket.on("temp", function(temperature) {
+            _this.temp = parseFloat(temperature);
+        })
+
+        this.socket.on("M1", function(data) {
+            _this.m1 = data;
+        })
+
+        this.socket.on("M2", function(data) {
+            _this.m2 = data;
+        })
+
+        this.socket.on("serialPort", function(status) {
+            _this.serialStatus = status == "opened";
+        })
+
+        this.socket.on("log", function(logs) {
+            _this.log += logs + "/n";
+        })
+
     }
 }

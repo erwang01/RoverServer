@@ -25,6 +25,36 @@
     </main>
 
     <footer class="mdl-mega-footer">
-        Status: <span class="connected" *ngIf="connected">Connected</span><span class="disconnected" *ngIf="!connected">Disconnected</span>
+      Serial Status:
+        <span class="connected" *ngIf="serialStatus">Connected</span>
+        <span class="disconnected" *ngIf="!serialStatus">Disconnected</span>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <div *ngIf="serialStatus">
+        Arduino Status:
+          <span class="connected" *ngIf="connected">Connected</span>
+          <span class="disconnected" *ngIf="!connected">Disconnected</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        M1 Current:
+          <span class="currentSafe" *ngIf="m1Current<30">{{ m1Current }} mA</span>
+          <span class="currentWarning" *ngIf="m1Current<100&&m1Current>=30">{{ m1Current }} mA</span>
+          <span class="currentDanger" *ngIf="m1Current>=100">{{ m1Current }} mA</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        M2 Current:
+          <span class="currentSafe" *ngIf="m2Current<30">{{ m2Current }} mA</span>
+          <span class="currentWarning" *ngIf="m2Current<100&&m2Current>=30">{{ m2Current }} mA</span>
+          <span class="currentDanger" *ngIf="m2Current>=100">{{ m2Current }} mA</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Temperature:
+          {{temp}} &deg;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Motor 1:
+          {{m1}}
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Motor 2:
+          {{m2}}
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Log:
+          {{log}}
+      </div>
     </footer>
 </div>

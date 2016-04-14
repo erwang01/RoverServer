@@ -22,7 +22,7 @@ System.register(["angular2/core"], function(exports_1, context_1) {
                 function SocketService() {
                 }
                 SocketService.prototype.connect = function (url) {
-                    if (url === void 0) { url = "http://192.168.15.107:3000"; }
+                    if (url === void 0) { url = "http://192.168.15.149:3000"; }
                     this.socket = io(url);
                 };
                 SocketService.prototype.getSocket = function () {

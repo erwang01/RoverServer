@@ -4,3 +4,12 @@
 .disconnected {
     color: #ff2e2e;
 }
+.currentSafe {
+    color: #3fa63f;
+}
+.currentWarning {
+    color: #ff8000;
+}
+.currentDanger {
+    color: #ff1a1a;
+}
