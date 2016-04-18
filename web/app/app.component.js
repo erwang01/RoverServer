@@ -98,6 +98,9 @@ System.register(["./services/socket.service", "./controller/controller.component
                     this.socket.on("log", function (logs) {
                         _this.log += logs + "/n";
                     });
+                    this.socket.on("serialOut", function (data) {
+                        _this.serialOut = JSON.stringify(data);
+                    });
                 };
                 AppComponent = __decorate([
                     core_1.Component({

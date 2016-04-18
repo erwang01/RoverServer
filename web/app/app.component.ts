@@ -32,6 +32,7 @@ export class AppComponent implements OnInit {
     m2Speed: number = 0;
     serialStatus: boolean = false;
     log: string;
+    serialOut: string;
 
     constructor(public router: Router, public socketService: SocketService) {}
 
@@ -104,6 +105,10 @@ export class AppComponent implements OnInit {
 
         this.socket.on("log", function(logs) {
             _this.log += logs + "/n";
+        })
+
+        this.socket.on("serialOut", function(data) {
+            _this.serialOut = JSON.stringify(data);
         })
 
     }
