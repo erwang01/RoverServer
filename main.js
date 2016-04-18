@@ -53,6 +53,10 @@ io.on("connection", function(socket){
       console.log(data)
     })
 
+    socket.on("gamepad", function(data) {
+      io.emit("gamepad", data);
+    });
+
     socket.on("disconnect", function(){
         console.log("User Disconnected");
     });
