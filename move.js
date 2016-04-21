@@ -109,6 +109,14 @@ socket.on('serialOut', function(data) {
   }
   console.log(data)
 });
+/*
+//watchdog socket, not currently needed as gamepad should write every 20 ms
+socket.on('watchdog', function(data) {
+  console.log(data);
+  serialPort.write(' ');
+})
+*/
+//disconnected socket
 socket.on('disconnect', function(){
   console.log("Disconnected")
   if(serialPort.isOpen()) {
@@ -157,10 +165,9 @@ function updateTime() {
 //this function will always run, acting as a watch dog, stops rover every time connection is lost.
 //also posts this as a serialPort disconnect on the web page
 function checkTime() {
-  while(1) {
-    if (time < d.getTime()-2000) {
-      socket.emit('serialIn', 'SerialPort: Disconnected')
-      write(0,0)
-    }
+  if (time < d.getTime()-2000) {
+    socket.emit('serialIn', 'SerialPort: Disconnected')
+    write(0,0)
   }
+  setTimeout(checkTime(), 20)
 }
