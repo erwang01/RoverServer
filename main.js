@@ -19,6 +19,7 @@ io.on("connection", function(socket){
 
     socket.on("serialOut", function(data) {
       io.emit("serialOut", data)
+      console.log( data)
     })
 
     socket.on("serialIn", function(data) {

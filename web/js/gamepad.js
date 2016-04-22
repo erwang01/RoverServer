@@ -1,7 +1,7 @@
 var gamepads = {};
 var haveEvents = 'GamepadEvent' in window;
 var haveWebkitEvents = 'WebKitGamepadEvent' in window;
-var socket = require('socket.io-client')('http://196.168.15.149:3000');
+var socket = io();
 var command;
 var scan;
 //handles connection and disconnection of gamepads
@@ -13,24 +13,25 @@ function gamepadHandler(event, connecting) {
   if (connecting) {
     gamepads[gamepad.index] = gamepad;
     console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
-      e.gamepad.index, e.gamepad.id,
-      e.gamepad.buttons.length, e.gamepad.axes.length);
-    socket.emit("gamepad", connected)
+      gamepad.index, gamepad.id,
+      gamepad.buttons.length, gamepad.axes.length);
+    console.log(gamepads[gamepad.index])
+    socket.emit("gamepad", "connected")
     commandLoop();
-    } else {
+  } else {
     delete gamepads[gamepad.index];
     console.log("Gamepad disconnected from index %d: %s",
-      e.gamepad.index, e.gamepad.id);
-    socket.emit("gamepad",disconnected)
+      gamepad.index, gamepad.id);
+    socket.emit("gamepad","disconnected")
   }
 }
 
 //function keeps getting values from first gamepad checking axis 0 and 1 for x y values respectively.
 //maps values to left right motors and again maps that to axis 2, throttle.
 function commandLoop () {
-  var gamepadconnected = true;
-  gamepadconnected = false;
-  for (gamepad in gamepads) {
+  var gamepadconnected = false;
+  for (j in gamepads) {
+    var gamepad = gamepads[j];
     if (gamepadconnected) {
     }
     else if (gamepad) {
@@ -40,7 +41,7 @@ function commandLoop () {
         var data = {valueL: 0, valueR: 0}
         //when switched to mode Orange with button 24, tank drive active
         // axis 2 (throttle) is left and joystick is right.
-        if (gamepad.button[24]) {
+        if (gamepad.buttons[24]) {
           var right = -axis[1];
           var left = axis[2];
           data.valueL = left;
@@ -53,11 +54,12 @@ function commandLoop () {
           data.valueR = (drivePower - turnPower)/2*throttle;
         }
         socket.emit("serialOut", data);
+        console.log(data)
       }
     }
   }
   if (gamepadconnected) {
-    setTimeout(commandLoop(),20)
+    setTimeout(commandLoop(),100)
   }
 }
 
@@ -75,14 +77,20 @@ function scangamepads() {
     }
   }
 }
-
+if (JSON.stringify(gamepads) !== JSON.stringify({})) {
+  console.log(gamepads)
+  commandLoop();
+}
 //determine which event listener is best
 if (haveEvents) {
   window.addEventListener("gamepadconnected", function(e) { gamepadHandler(e, true); }, false);
   window.addEventListener("gamepaddisconnected", function(e) { gamepadHandler(e, false); }, false);
+  console.log("haveEvents: "+ haveEvents)
 } else if (haveWebkitEvents) {
   window.addEventListener("webkitgamepadconnected", function(e) { gamepadHandler(e, true); }, false);
   window.addEventListener("webkitgamepaddisconnected", function(e) { gamepadHandler(e, false); }, false);
+  console.log("haveWebkitEvents: "+ haveWebkitEvents)
 } else {
   scan = setInterval(scangamepads, 500);
+  console.log("scanning for gamepad")
 }
