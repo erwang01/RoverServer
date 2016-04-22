@@ -128,8 +128,8 @@ socket.on('disconnect', function(){
 //write function takes in left and right values to be written to serial.
 //currently accepts speeds between -5 and 5.
 function write(valueL, valueR) {
-    resultLeft = valueL*80;
-    resultRight = valueR*80;
+    resultLeft = valueL*400;
+    resultRight = valueR*400;
     if (valueL == 0)
         resultLeft = 0;
     if (valueR == 0)

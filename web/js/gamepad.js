@@ -29,7 +29,9 @@ function gamepadHandler(event, connecting) {
 //function keeps getting values from first gamepad checking axis 0 and 1 for x y values respectively.
 //maps values to left right motors and again maps that to axis 2, throttle.
 function commandLoop () {
+  var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
   var gamepadconnected = false;
+  var j;
   for (j in gamepads) {
     var gamepad = gamepads[j];
     if (gamepadconnected) {
@@ -41,7 +43,7 @@ function commandLoop () {
         var data = {valueL: 0, valueR: 0}
         //when switched to mode Orange with button 24, tank drive active
         // axis 2 (throttle) is left and joystick is right.
-        if (gamepad.buttons[24]) {
+        if (gamepad.buttons[24].pressed) {
           var right = -axis[1];
           var left = axis[2];
           data.valueL = left;
@@ -53,13 +55,14 @@ function commandLoop () {
           data.valueL = (drivePower + turnPower)/2*throttle;
           data.valueR = (drivePower - turnPower)/2*throttle;
         }
+        //data should be values between -1 and 1
         socket.emit("serialOut", data);
         console.log(data)
       }
     }
   }
   if (gamepadconnected) {
-    setTimeout(commandLoop(),100)
+    setTimeout(commandLoop,100)
   }
 }
 
