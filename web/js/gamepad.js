@@ -29,7 +29,7 @@ function gamepadHandler(event, connecting) {
 //function keeps getting values from first gamepad checking axis 0 and 1 for x y values respectively.
 //maps values to left right motors and again maps that to axis 2, throttle.
 function commandLoop () {
-  var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
+  scangamepads();
   var gamepadconnected = false;
   var j;
   for (j in gamepads) {
@@ -43,17 +43,25 @@ function commandLoop () {
         var data = {valueL: 0, valueR: 0}
         //when switched to mode Orange with button 24, tank drive active
         // axis 2 (throttle) is left and joystick is right.
-        if (gamepad.buttons[24].pressed) {
+        if(gamepad.buttons[25].pressed){
+          data.valueL=0;
+          data.valueR=0;
+        }
+        else if (gamepad.buttons[24].pressed) {
           var right = -axis[1];
-          var left = axis[2];
+          var left = -axis[2];
           data.valueL = left;
           data.valueR = right;
         } else {
-          var drivePower = -axis[1];
-          var turnPower = axis[0];
-          var throttle = axis[2];
-          data.valueL = (drivePower + turnPower)/2*throttle;
-          data.valueR = (drivePower - turnPower)/2*throttle;
+          var drivePower = deadspace(-axis[1]);
+          var turnPower = deadspace(axis[0]);
+          var throttle = (-axis[2]+1)/2;
+          console.log("throttle = " + throttle)
+          console.log("turnPower = " + turnPower)
+          console.log("drivePower = " + drivePower)
+          data.valueL = (drivePower + turnPower)*throttle;
+          data.valueR = (drivePower - turnPower)*throttle;
+          data = limit(data)
         }
         //data should be values between -1 and 1
         socket.emit("serialOut", data);
@@ -66,6 +74,36 @@ function commandLoop () {
   }
 }
 
+//removes deadspace by translating such space to be 0.
+function deadspace(value) {
+  if(Math.abs(value)<0.03) {
+    value = 0;
+  }
+  return value;
+}
+
+//limits power to -1 and 1
+function limit( data ) {
+  if (Math.abs(data.valueL)>1) {
+    data.valueR = data.valueR/Math.abs(data.valueL);
+    data.valueL = data.valueL/Math.abs(data.valueL);
+  }
+
+  if (Math.abs(data.valueR)>1) {
+    data.valueL = data.valueL/Math.abs(data.valueR);
+    data.valueR = data.valueR/Math.abs(data.valueR);
+  }
+
+  if(Math.abs(data.valueL) = 0 && Math.abs(data.valueR) != 0) {
+    data.valueL = 0.1;
+  }
+
+  if(Math.abs(data.valueR) = 0 && Math.abs(data.valueL) != 0) {
+    data.valueR = 0.1;
+  }
+  return data;
+}
+
 //scans for gamepads in chrome based browsers
 function scangamepads() {
   var gamepad = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads() : []);
@@ -76,10 +114,11 @@ function scangamepads() {
       } else {
         gamepads[gamepad[i].index] = gamepad[i];
       }
-      clearInterval(scan);      //stop polling for new gamepads once one is found. this may be problamatic right now considering above code structure is for multiple pads.
     }
   }
+  clearInterval(scan);
 }
+
 if (JSON.stringify(gamepads) !== JSON.stringify({})) {
   console.log(gamepads)
   commandLoop();
