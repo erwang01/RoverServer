@@ -66,6 +66,27 @@ function commandLoop () {
         //data should be values between -1 and 1
         socket.emit("serialOut", data);
         console.log(data)
+
+        var pan;
+        pan.x = gamepad.buttons[20].value-gamepad.buttons[22].value
+        pan.y = gamepad.buttons[19].value-gamepad.buttons[21].value
+        socket.emit("pipan",pan)
+        if(pan.x === 1) {
+            //camera right
+            servo_right()
+        }
+        else if(pan.x === -1) {
+            //camera left
+            servo_left()
+        }
+        if(pan.y === 1) {
+            //camera up
+            servo_up()
+        }
+        else if(pan.y === -1) {
+            //camera down
+            servo_down()
+        }
       }
     }
   }

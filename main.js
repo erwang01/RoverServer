@@ -13,9 +13,14 @@ app.get('/', function(req, res){
     res.sendFile(__dirname + "/web/index.html");
 });
 
-io.on("connection", function(socket){
+io.on("connection", function(socket) {
     console.log("User Connected");
     users ++;
+
+    //changes camera rotation
+    socket.on("pipan", function(data) {
+      io.emit("pipan", data)
+    })
 
     socket.on("serialOut", function(data) {
       io.emit("serialOut", data)
@@ -23,7 +28,7 @@ io.on("connection", function(socket){
     })
 
     socket.on("serialIn", function(data) {
-      if (data.indexOf(':') !== -1){
+      if (data.indexOf(':') !== -1) {
         switch(data.substring(0, data.indexOf(':')+1)) {
           case "Status:":
             io.emit("status", data.substring(data.indexOf(':')+1))
@@ -66,7 +71,7 @@ io.on("connection", function(socket){
     })
     */
 
-    socket.on("disconnect", function(){
+    socket.on("disconnect", function() {
         console.log("User Disconnected");
         users --;
         if (users <2) {
