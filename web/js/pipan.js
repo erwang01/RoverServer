@@ -39,9 +39,9 @@ function ajax_pipan_done() {
 
 function ajax_pipan_start () {
   if (mode == 1)
-     ajax_pipan.open("GET","pipan.php?pan=" + pan + "&tilt=" + tilt, true);
+     ajax_pipan.open("GET","http://"+document.domain+"/html/pipan.php?pan=" + pan + "&tilt=" + tilt, true);
   else if (mode == 2)
-     ajax_pipan.open("GET","pipan.php?action=" + cmd, true);
+     ajax_pipan.open("GET","http://"+document.domain+"/html/pipan.php?action=" + cmd, true);
 
   if (mode != 0)
      ajax_pipan.send();
@@ -78,12 +78,12 @@ function led_switch () {
 
   if(!led_stat) {
     led_stat = true;
-    ajax_pipan.open("GET","pipan.php?red=" + document.getElementById("pilight_r").value + "&green=" + document.getElementById("pilight_g").value + "&blue=" + document.getElementById("pilight_b").value, true);
+    ajax_pipan.open("GET","http://"+document.domain+"/html/pipan.php?red=" + document.getElementById("pilight_r").value + "&green=" + document.getElementById("pilight_g").value + "&blue=" + document.getElementById("pilight_b").value, true);
     ajax_pipan.send();
   }
   else {
     led_stat = false;
-    ajax_pipan.open("GET","pipan.php?red=0&green=0&blue=0", true);
+    ajax_pipan.open("GET","http://"+document.domain+"/html/pipan.php?red=0&green=0&blue=0", true);
     ajax_pipan.send();
   }
 

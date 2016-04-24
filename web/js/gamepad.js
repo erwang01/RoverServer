@@ -67,7 +67,7 @@ function commandLoop () {
         socket.emit("serialOut", data);
         console.log(data)
 
-        var pan;
+        var pan = {x:0, y:0}
         pan.x = gamepad.buttons[20].value-gamepad.buttons[22].value
         pan.y = gamepad.buttons[19].value-gamepad.buttons[21].value
         socket.emit("pipan",pan)
@@ -115,11 +115,11 @@ function limit( data ) {
     data.valueR = data.valueR/Math.abs(data.valueR);
   }
 
-  if(Math.abs(data.valueL) = 0 && Math.abs(data.valueR) != 0) {
+  if(Math.abs(data.valueL) === 0 && Math.abs(data.valueR) !== 0) {
     data.valueL = 0.1;
   }
 
-  if(Math.abs(data.valueR) = 0 && Math.abs(data.valueL) != 0) {
+  if(Math.abs(data.valueR) === 0 && Math.abs(data.valueL) !== 0) {
     data.valueR = 0.1;
   }
   return data;
