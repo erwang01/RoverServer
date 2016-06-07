@@ -62,6 +62,14 @@
           <span *ngIf="m2State!==fault">{{ m2state }}</span>
           <span class="danger" *ngIf="m2State===fault">{{ m2state }}</span>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Battery Voltage:
+          <span *ngIf="vBatt>=6.6">{{ vBatt }}</span>
+          <span class="danger" *ngIf="vBatt<=6.6">{{ vBatt }}</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Battery Current:
+          <span *ngIf="cBatt<=10000">{{ cBatt }}</span>
+          <span class="danger" *ngIf="cBatt>=10000">{{ cBatt }}</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         Log:
           {{log}}
         Serial Out:

@@ -26,7 +26,7 @@ io.on("connection", function(socket) {
       io.emit("serialOut", data)
       console.log( data)
     })
-
+    //parses data from move.js
     socket.on("serialIn", function(data) {
       if (data.indexOf(':') !== -1) {
         switch(data.substring(0, data.indexOf(':')+1)) {
@@ -50,6 +50,13 @@ io.on("connection", function(socket) {
             break
           case "SerialPort:":
             io.emit("serialPort", data.substring(data.indexOf(':')+1))
+            break
+          case "VBatt:":
+            io.emit("VBatt", data.substring(data.indexOf(':') + 1))
+            break
+          case "CBatt:":
+            io.emit("CBatt", data.substring(data.indexOf(':') + 1))
+            break
           default:
             io.emit("log", data)
             break

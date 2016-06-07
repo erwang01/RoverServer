@@ -38,6 +38,8 @@ System.register(["./services/socket.service", "./controller/controller.component
                     this.m1Speed = 0;
                     this.m2Speed = 0;
                     this.serialStatus = false;
+                    this.vBatt = -1;
+                    this.cBatt = -1;
                 }
                 AppComponent.prototype.ngOnInit = function () {
                     this.socketService.connect();
@@ -97,6 +99,12 @@ System.register(["./services/socket.service", "./controller/controller.component
                     });
                     this.socket.on("log", function (logs) {
                         _this.log += logs + "/n";
+                    });
+                    this.socket.on("VBatt", function (voltage) {
+                        _this.vBatt = parseFloat(voltage.trim());
+                    });
+                    this.socket.on("CBatt", function (current) {
+                        _this.cBatt = parseFloat(current.trim());
                     });
                     this.socket.on("serialOut", function (data) {
                         _this.serialOut = JSON.stringify(data);
