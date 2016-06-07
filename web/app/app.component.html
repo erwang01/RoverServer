@@ -26,11 +26,11 @@
 
 
     <footer class="mdl-mega-footer">
-      Serial Status:
-        <span class="connected" *ngIf="serialStatus">Connected</span>
-        <span class="disconnected" *ngIf="!serialStatus">Disconnected</span>
+      Serial Port:
+        <span class="connected" *ngIf="serialPort">Connected</span>
+        <span class="disconnected" *ngIf="!serialPort">Disconnected</span>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <div *ngIf="serialStatus">
+      <!-- <div *ngIf="serialPort"> -->
         Arduino Status:
           <span class="connected" *ngIf="connected">Connected</span>
           <span class="disconnected" *ngIf="!connected">Disconnected</span>
@@ -74,6 +74,6 @@
           {{log}}
         Serial Out:
           {{serialOut}}
-      </div>
+      <!--</div>-->
     </footer>
 </div>

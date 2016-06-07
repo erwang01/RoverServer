@@ -37,7 +37,7 @@ System.register(["./services/socket.service", "./controller/controller.component
                     this.temp = 0;
                     this.m1Speed = 0;
                     this.m2Speed = 0;
-                    this.serialStatus = false;
+                    this.serialPort = false;
                     this.vBatt = -1;
                     this.cBatt = -1;
                 }
@@ -95,7 +95,7 @@ System.register(["./services/socket.service", "./controller/controller.component
                         }
                     });
                     this.socket.on("serialPort", function (status) {
-                        _this.serialStatus = status.trim() == "opened";
+                        _this.serialPort = status.trim().equals("opened");
                     });
                     this.socket.on("log", function (logs) {
                         _this.log += logs + "/n";
@@ -127,7 +127,7 @@ System.register(["./services/socket.service", "./controller/controller.component
                             component: controller_component_1.ControllerComponent,
                             useAsDefault: true
                         }
-                    ]), 
+                    ]),
                     __metadata('design:paramtypes', [router_1.Router, socket_service_1.SocketService])
                 ], AppComponent);
                 return AppComponent;

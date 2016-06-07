@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
     m1Speed: number = 0;
     m2State: string;
     m2Speed: number = 0;
-    serialStatus: boolean = false;
+    serialPort: boolean = false;
     log: string;
     serialOut: string;
     vBatt: number = -1;
@@ -102,7 +102,7 @@ export class AppComponent implements OnInit {
         })
 
         this.socket.on("serialPort", function(status) {
-            _this.serialStatus = status.trim() == "opened";
+            _this.serialPort = status.trim() == "opened";
         })
 
         this.socket.on("log", function(logs) {
