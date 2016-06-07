@@ -6,8 +6,7 @@ var SerialPort = SerialPortLib.SerialPort;
 //mac testing(only when plugged in), usb serial(only when plugged in), gpio serial(always present)
 var serialPorts = ["/dev/cu.usbserial-AM01VDHP", "/dev/ttyUSB0", "/dev/ttyAMA0"];
 var serialPort;
-var d = new Date();
-var time = d.getTime();
+var time = new Date().getTime();
 
 //attempt to connect with serial
 SerialPortLib.list(function(err, ports) {
@@ -167,16 +166,17 @@ function write(valueL, valueR) {
 
 //called when comms from arduino recieved
 function updateTime() {
-    time = d.getTime();
+    time = new Date().getTime();
 }
 
 //check for connection
 //this function will always run, acting as a watch dog, stops rover every time connection is lost.
 //also posts this as a serialPort disconnect on the web page
 function checkTime() {
-    if (time < d.getTime()-2000) {
+    var currentTime = new Date().getTime()
+    if (time < currentTime-2000) {
         socket.emit('serialIn', 'SerialPort: Disconnected')
         write(0,0)
     }
-    setTimeout(checkTime(), 20)
+    setTimeout(checkTime,2000+time-currentTime);
 }
