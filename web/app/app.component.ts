@@ -35,6 +35,7 @@ export class AppComponent implements OnInit {
     serialOut: string;
     vBatt: number = -1;
     cBatt: number = -1;
+    iBatt: number = -1;
 
     constructor(public router: Router, public socketService: SocketService) {}
 
@@ -113,8 +114,12 @@ export class AppComponent implements OnInit {
             _this.vBatt = parseFloat(voltage.trim());
         })
 
-        this.socket.on("CBatt", function(current) {
-            _this.cBatt = parseFloat(current.trim());
+        this.socket.on("IBatt", function(current) {
+            _this.iBatt = parseFloat(current.trim());
+        })
+
+        this.socket.on("CBatt", function(capacity) {
+            _this.cBatt = parseFloat(capacity.trim());
         })
 
         this.socket.on("serialOut", function(data) {

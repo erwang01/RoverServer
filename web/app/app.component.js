@@ -40,6 +40,7 @@ System.register(["./services/socket.service", "./controller/controller.component
                     this.serialPort = false;
                     this.vBatt = -1;
                     this.cBatt = -1;
+                    this.iBatt = -1;
                 }
                 AppComponent.prototype.ngOnInit = function () {
                     this.socketService.connect();
@@ -95,7 +96,7 @@ System.register(["./services/socket.service", "./controller/controller.component
                         }
                     });
                     this.socket.on("serialPort", function (status) {
-                        _this.serialPort = status.trim().equals("opened");
+                        _this.serialPort = status.trim() == "opened";
                     });
                     this.socket.on("log", function (logs) {
                         _this.log += logs + "/n";
@@ -103,8 +104,11 @@ System.register(["./services/socket.service", "./controller/controller.component
                     this.socket.on("VBatt", function (voltage) {
                         _this.vBatt = parseFloat(voltage.trim());
                     });
-                    this.socket.on("CBatt", function (current) {
-                        _this.cBatt = parseFloat(current.trim());
+                    this.socket.on("IBatt", function (current) {
+                        _this.iBatt = parseFloat(current.trim());
+                    });
+                    this.socket.on("CBatt", function (capacity) {
+                        _this.cBatt = parseFloat(capacity.trim());
                     });
                     this.socket.on("serialOut", function (data) {
                         _this.serialOut = JSON.stringify(data);
@@ -127,7 +131,7 @@ System.register(["./services/socket.service", "./controller/controller.component
                             component: controller_component_1.ControllerComponent,
                             useAsDefault: true
                         }
-                    ]),
+                    ]), 
                     __metadata('design:paramtypes', [router_1.Router, socket_service_1.SocketService])
                 ], AppComponent);
                 return AppComponent;

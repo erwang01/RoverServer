@@ -57,6 +57,9 @@ io.on("connection", function(socket) {
           case "CBatt:":
             io.emit("CBatt", data.substring(data.indexOf(':') + 1))
             break
+          case "IBatt:":
+            io.emit("IBatt", data.substring(data.indexOf(':') + 1))
+            break
           default:
             io.emit("log", data)
             break

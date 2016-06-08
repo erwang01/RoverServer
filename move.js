@@ -137,6 +137,7 @@ socket.on('disconnect', function(){
 function write(valueL, valueR) {
     resultLeft = valueL*400;
     resultRight = valueR*400;
+    console.log("L: " + valueL + ", R: " + valueR)
     if (valueL == 0)
     resultLeft = 0;
     if (valueR == 0)

@@ -64,11 +64,15 @@
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         Battery Voltage:
           <span *ngIf="vBatt>=6.6">{{ vBatt }}</span>
-          <span class="danger" *ngIf="vBatt<=6.6">{{ vBatt }}</span>
+          <span class="danger" *ngIf="vBatt<6.6">{{ vBatt }}</span>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         Battery Current:
-          <span *ngIf="cBatt<=10000">{{ cBatt }}</span>
-          <span class="danger" *ngIf="cBatt>=10000">{{ cBatt }}</span>
+          <span *ngIf="iBatt<=10000">{{ iBatt }}</span>
+          <span class="danger" *ngIf="iBatt>10000">{{ iBatt }}</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        mAh Spent:
+          <span *ngIf="cBatt<=4000">{{ cBatt }}</span>
+          <span class="danger" *ngIf="cBatt>4000">{{ cBatt }}</span>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         Log:
           {{log}}
