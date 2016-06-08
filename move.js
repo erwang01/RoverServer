@@ -177,6 +177,7 @@ function checkTime() {
     var currentTime = new Date().getTime()
     if (time < currentTime-2000) {
         socket.emit('serialIn', 'SerialPort: Disconnected')
+        console.log("timeout")
         write(0,0)
     }
     setTimeout(checkTime,2000+time-currentTime);
