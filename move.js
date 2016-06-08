@@ -108,13 +108,13 @@ socket.on('connect', function(){
 
 //write to serial
 socket.on('serialOut', function(data) {
+    console.log(data)
     if(serialPort.isOpen()) {
         write(data.valueL, data.valueR)
     }
     else {
         socket.emit('serialIn', 'Error: Unable to send command, Serial Port closed')
     }
-    console.log(data)
 });
 /*
 //watchdog socket, not currently needed as gamepad should write every 20 ms
