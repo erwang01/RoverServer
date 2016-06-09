@@ -24,7 +24,7 @@ io.on("connection", function(socket) {
 
     socket.on("serialOut", function(data) {
       io.emit("serialOut", data)
-      console.log( data)
+      console.log("SerialOut" + data)
     })
     //parses data from move.js
     socket.on("serialIn", function(data) {
