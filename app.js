@@ -15,10 +15,60 @@ app.get('/', function(req, res){
     res.sendFile(__dirname + "/web/index.html");
 });
 
-// example
-Arduino.on("temperature", function(temp) {
-    Log.i("Temperature received: " + temp);
-    io.emit("temperature", temp);
+Arduino.on("Status", function(status) {
+    Log.i("Status: " + status);
+    io.emit("Status", status);
+});
+
+Arduino.on("M1 current", function(current) {
+    Log.i("M1 current: " + current);
+    io.emit("M1 current", current);
+});
+
+Arduino.on("M2 current", function(current) {
+    Log.i("M2 current: " + current);
+    io.emit("M2 current", current);
+});
+
+//used to be called M1, check for compatibility errors
+Arduino.on("M1Speed", function(speed) {
+    Log.i("M1Speed: " + speed);
+    io.emit("M1Speed", speed);
+});
+
+Arduino.on("M2Speed", function(speed) {
+    Log.i("M2Speed: " + speed);
+    io.emit("M2Speed", speed);
+});
+
+Arduino.on("temp", function(temp) {
+    Log.i("Temperature: " + temp);
+    io.emit("temp", temp);
+});
+
+Arduino.on("SerialPort", function(status) {
+    Log.i("SerialPort: " + status);
+    io.emit("SerialPort", status);
+});
+
+Arduino.on("VBatt", function(voltage) {
+    Log.i("VBatt: " + voltage);
+    io.emit("VBatt", voltage);
+});
+
+Arduino.on("CBatt", function(capacity) {
+    Log.i("CBatt: " + capacity);
+    io.emit("CBatt", capacity);
+});
+
+Arduino.on("IBatt", function(current) {
+    Log.i("IBatt: " + current);
+    io.emit("IBatt", current);
+});
+
+Arduino.on("log", function(data) {
+    Log.i("log: " + data);
+    io.emit("log", data);
 });
 
 io.on("connection", function(socket){
@@ -33,49 +83,6 @@ io.on("connection", function(socket){
     socket.on("serialOut", function(data) {
         io.emit("serialOut", data)
     });
-
-    socket.on("serialIn", function(data) {
-        if (data.indexOf(':') !== -1){
-            switch(data.substring(0, data.indexOf(':')+1)) {
-                case "Status:":
-                    io.emit("status", data.substring(data.indexOf(':')+1))
-                    break
-                case "M1 current:":
-                    io.emit("M1Current", data.substring(data.indexOf(':')+1))
-                    break
-                case "M2 current:":
-                    io.emit("M2Current", data.substring(data.indexOf(':')+1))
-                    break
-                case "Deg C:":
-                    io.emit("temp", data.substring(data.indexOf(':')+1))
-                    break
-                case "M1:":
-                    io.emit("M1", data.substring(data.indexOf(':')+1))
-                    break
-                case "M2:":
-                    io.emit("M2", data.substring(data.indexOf(':')+1))
-                    break
-                case "SerialPort:":
-                    io.emit("serialPort", data.substring(data.indexOf(':')+1))
-                    break;
-                case "VBatt:":
-                    io.emit("VBatt", data.substring(data.indexOf(':') + 1))
-                    break;
-                case "CBatt:":
-                    io.emit("CBatt", data.substring(data.indexOf(':') + 1))
-                    break;
-                case "IBatt:":
-                    io.emit("IBatt", data.substring(data.indexOf(':') + 1))
-                    break;
-                default:
-                    io.emit("log", data)
-                    break
-            }
-        } else {
-            io.emit("log", data)
-        }
-        console.log(data)
-    })
 
     socket.on("gamepad", function(data) {
       io.emit("gamepad", data);
