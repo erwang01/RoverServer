@@ -42,6 +42,6 @@ export class AppComponent implements OnInit {
 
         this.socket.on("status", function(status) {
             _this.connected = status == "connected";
-        })
+        });
     }
 }
