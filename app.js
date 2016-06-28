@@ -5,6 +5,7 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var Log = require("./lib/log.js")(true);
+var Arduino = require("./lib/arduino.js");
 var users = 0;
 
 app.use(express.static('web'));
@@ -12,6 +13,12 @@ app.use(express.static('node_modules'));
 
 app.get('/', function(req, res){
     res.sendFile(__dirname + "/web/index.html");
+});
+
+// example
+Arduino.on("temperature", function(temp) {
+    Log.i("Temperature received: " + temp);
+    io.emit("temperature", temp);
 });
 
 io.on("connection", function(socket){
