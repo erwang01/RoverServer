@@ -18,16 +18,17 @@
         <script src="angular2/bundles/angular2.dev.js"></script>
         <script src="angular2/bundles/router.dev.js"></script>
 
-        <script src="systemjs.config.js"></script>
-
         <script src="/socket.io/socket.io.js"></script>
         <script src="material-design-lite/material.min.js"></script>
         <script src="js/jquery-2.2.3.min.js"></script>
         <script type="text/javascript" src="js/gamepad.js"></script>
         <script type="text/javascript" src="js/pipan.js"></script>
 
+        <script src="systemjs.config.js"></script>
+        <script>
+            System.import('app').catch(function(err){ console.error(err); });
+        </script>
     </head>
-
     <body>
         <app>Loading...</app>
     </body>

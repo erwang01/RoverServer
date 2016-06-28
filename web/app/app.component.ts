@@ -54,10 +54,6 @@ export class AppComponent implements OnInit {
         var _this = this;
 
         this.socket.on("status", function(status) {
-<<<<<<< HEAD
-            _this.connected = status == "connected";
-        });
-=======
             _this.arduino = status.trim() == "connected";
         })
 
@@ -129,7 +125,5 @@ export class AppComponent implements OnInit {
         this.socket.on("serialOut", function(data) {
             _this.serialOut = JSON.stringify(data);
         })
-
->>>>>>> origin/node
     }
 }
