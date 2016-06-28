@@ -4,7 +4,7 @@ import {Injectable} from "angular2/core";
 export class SocketService {
     socket: any;
 
-    connect(url: string = "http://192.168.15.107:3000") {
+    connect(url: string = "http://192.168.15.149:3000") {
         this.socket = io(url);
     }
 

@@ -24,7 +24,60 @@
         <router-outlet></router-outlet>
     </main>
 
+
     <footer class="mdl-mega-footer">
-        Status: <span class="connected" *ngIf="connected">Connected</span><span class="disconnected" *ngIf="!connected">Disconnected</span>
+      Serial Port:
+        <span class="connected" *ngIf="serialPort">Connected</span>
+        <span class="disconnected" *ngIf="!serialPort">Disconnected</span>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <!-- <div *ngIf="serialPort"> -->
+        Arduino Status:
+          <span class="connected" *ngIf="connected">Connected</span>
+          <span class="disconnected" *ngIf="!connected">Disconnected</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        M1 Current:
+          <span class="safe" *ngIf="m1Current<30">{{ m1Current }} mA</span>
+          <span class="warning" *ngIf="m1Current<100&&m1Current>=30">{{ m1Current }} mA</span>
+          <span class="danger" *ngIf="m1Current>=100">{{ m1Current }} mA</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        M2 Current:
+          <span class="safe" *ngIf="m2Current<30">{{ m2Current }} mA</span>
+          <span class="warning" *ngIf="m2Current<100&&m2Current>=30">{{ m2Current }} mA</span>
+          <span class="danger" *ngIf="m2Current>=100">{{ m2Current }} mA</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Temperature:
+          {{temp}} &deg;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Motor 1 Speed:
+          {{m1Speed}}
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Motor 2 Speed:
+          {{m2Speed}}
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Motor 1 State:
+          <span *ngIf="m1State!==fault">{{ m1state }}</span>
+          <span class="danger" *ngIf="m1State===fault">{{ m1state }}</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Motor 2 State:
+          <span *ngIf="m2State!==fault">{{ m2state }}</span>
+          <span class="danger" *ngIf="m2State===fault">{{ m2state }}</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Battery Voltage:
+          <span *ngIf="vBatt>=6.6">{{ vBatt }}</span>
+          <span class="danger" *ngIf="vBatt<6.6">{{ vBatt }}</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Battery Current:
+          <span *ngIf="iBatt<=10000">{{ iBatt }}</span>
+          <span class="danger" *ngIf="iBatt>10000">{{ iBatt }}</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        mAh Spent:
+          <span *ngIf="cBatt<=4000">{{ cBatt }}</span>
+          <span class="danger" *ngIf="cBatt>4000">{{ cBatt }}</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Log:
+          {{log}}
+        Serial Out:
+          {{serialOut}}
+      <!--</div>-->
     </footer>
 </div>
