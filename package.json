@@ -1,0 +1,49 @@
+{
+  "name": "roverserver",
+  "version": "1.0.0",
+  "description": "Raspberry Pi end of Project Rover Curses Script for controlling rover via ssh connections",
+  "scripts": {
+    "test": "mocha ./test/test.js",
+    "typings": "typings",
+    "postinstall": "typings install",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erwang01/RoverServer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/erwang01/RoverServer/issues"
+  },
+  "homepage": "https://github.com/erwang01/RoverServer#readme",
+  "dependencies": {
+      "@angular/common":  "2.0.0-rc.3",
+      "@angular/compiler":  "2.0.0-rc.3",
+      "@angular/core":  "2.0.0-rc.3",
+      "@angular/forms": "0.1.1",
+      "@angular/http":  "2.0.0-rc.3",
+      "@angular/platform-browser":  "2.0.0-rc.3",
+      "@angular/platform-browser-dynamic":  "2.0.0-rc.3",
+      "@angular/router":  "3.0.0-alpha.7",
+      "@angular/router-deprecated":  "2.0.0-rc.2",
+      "@angular/upgrade":  "2.0.0-rc.3",
+      "systemjs": "0.19.27",
+      "core-js": "^2.4.0",
+      "reflect-metadata": "^0.1.3",
+      "rxjs": "5.0.0-beta.6",
+      "zone.js": "^0.6.12",
+      "bootstrap": "^3.3.6",
+    "material-design-lite": "^1.1.3",
+    "serialport": "^2.0.7-beta5",
+    "socket.io": "^1.4.5",
+    "socket.io-client": "^1.4.5"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.5.3",
+    "typescript": "^1.8.10",
+    "typings":"^1.0.4"
+  }
+}

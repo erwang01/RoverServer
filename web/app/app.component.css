@@ -1,0 +1,16 @@
+.connected {
+    color: #6ef598;
+}
+.disconnected {
+    color: #ff2e2e;
+}
+.safe {
+    color: #3fa63f;
+}
+.warning {
+    color: #ff8000;
+}
+.danger {
+    color: #ff1a1a;
+    font-size: 2 em;
+}
