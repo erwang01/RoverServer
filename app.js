@@ -82,6 +82,7 @@ io.on("connection", function(socket){
 
     socket.on("serialOut", function(data) {
         io.emit("serialOut", data)
+        Arduino.emit("serialOut", data)
     });
 
     socket.on("gamepad", function(data) {
@@ -99,6 +100,7 @@ io.on("connection", function(socket){
         users --;
         if (users <2) {
             io.emit("serialOut", {valueL:0, valueR:0})
+            Arduino.emit("serialOut", {valueL:0, valueR:0})
         }
     });
 });
