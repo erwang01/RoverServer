@@ -65,7 +65,7 @@ System.register(["./services/socket.service", "./controller/controller.component
                     this.socket.on("temp", function (temperature) {
                         _this.temp = parseFloat(temperature.trim());
                     });
-                    this.socket.on("M1", function (data) {
+                    this.socket.on("M1Speed", function (data) {
                         if (data === "breaks" || data === "fault") {
                             _this.m1State = data;
                         }
@@ -80,7 +80,7 @@ System.register(["./services/socket.service", "./controller/controller.component
                             console.log("unknown M1 value " + data);
                         }
                     });
-                    this.socket.on("M2", function (data) {
+                    this.socket.on("M2Speed", function (data) {
                         if (data === "breaks" || data === "fault") {
                             _this.m2State = data;
                         }
