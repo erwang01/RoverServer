@@ -15,9 +15,9 @@ app.get('/', function(req, res){
     res.sendFile(__dirname + "/web/index.html");
 });
 
-Arduino.on("Status", function(status) {
+Arduino.on("status", function(status) {
     Log.i("Status: " + status);
-    io.emit("Status", status);
+    io.emit("status", status);
 });
 
 Arduino.on("M1 current", function(current) {
