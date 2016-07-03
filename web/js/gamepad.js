@@ -91,7 +91,7 @@ function commandLoop () {
         }
     }
     if (gamepadconnected) {
-        setTimeout(commandLoop,200)
+        setTimeout(commandLoop,500)
     }
 }
 
