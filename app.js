@@ -7,7 +7,7 @@ var io = require('socket.io')(http);
 var Log = require("./lib/log.js")(true);
 var Arduino = require("./lib/arduino.js");
 var users = 0;
-
+Log.w("test");
 app.use(express.static('web'));
 app.use("/node_modules", express.static('node_modules'));
 
