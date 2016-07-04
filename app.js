@@ -9,7 +9,7 @@ var Arduino = require("./lib/arduino.js");
 var users = 0;
 
 app.use(express.static('web'));
-app.use(express.static('node_modules'));
+app.use("/node_modules", express.static('node_modules'));
 
 app.get('/', function(req, res){
     res.sendFile(__dirname + "/web/index.html");
