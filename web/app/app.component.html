@@ -26,6 +26,7 @@
       Serial Port:
         <span class="connected" *ngIf="serialPort">Connected</span>
         <span class="disconnected" *ngIf="!serialPort">Disconnected</span>
+        <a *ngIf="!serialPort" style="cursor: pointer;text-decoration:underline" (click)="reconnectSerialPort()">Reconnect</a>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <!-- <div *ngIf="serialPort"> -->
         Arduino Status:
