@@ -55,12 +55,16 @@ function commandLoop () {
                 } else {
                     var drivePower = deadspace(-axis[1]);
                     var turnPower = deadspace(axis[0]);
-                    var throttle = (-axis[2]+1)/2;
-                    console.log("throttle = " + throttle)
                     console.log("turnPower = " + turnPower)
                     console.log("drivePower = " + drivePower)
-                    data.valueL = (drivePower + turnPower)*throttle;
-                    data.valueR = (drivePower - turnPower)*throttle;
+                    if (turnPower > 0) { //turn right
+                        data.valueL = drivePower * (1 - (turnPower*2)/100)
+                        data.valueR = drivePower
+                    }
+                    else {
+                        data.valueL = drivePower
+                        data.valueR = drivePower * (1 + (turnPower*2)/100)
+                    }
                     data = limit(data)
                 }
                 //data should be values between -1 and 1
@@ -114,14 +118,7 @@ function limit( data ) {
         data.valueL = data.valueL/Math.abs(data.valueR);
         data.valueR = data.valueR/Math.abs(data.valueR);
     }
-
-    if(Math.abs(data.valueL) === 0 && Math.abs(data.valueR) !== 0) {
-        data.valueL = 0.1;
-    }
-
-    if(Math.abs(data.valueR) === 0 && Math.abs(data.valueL) !== 0) {
-        data.valueR = 0.1;
-    }
+    
     return data;
 }
 
