@@ -58,12 +58,12 @@ function commandLoop () {
                     console.log("turnPower = " + turnPower)
                     console.log("drivePower = " + drivePower)
                     if (turnPower > 0) { //turn right
-                        data.valueL = drivePower * (1 - (turnPower*2)/100)
+                        data.valueL = drivePower * (1 - (turnPower*50)/100)
                         data.valueR = drivePower
                     }
                     else {
                         data.valueL = drivePower
-                        data.valueR = drivePower * (1 + (turnPower*2)/100)
+                        data.valueR = drivePower * (1 + (turnPower*50)/100)
                     }
                     data = limit(data)
                 }
@@ -75,7 +75,6 @@ function commandLoop () {
                 pan.x = gamepad.buttons[20].value-gamepad.buttons[22].value
                 pan.y = gamepad.buttons[19].value-gamepad.buttons[21].value
                 socket.emit("pipan",pan)
-                
             }
         }
     }
