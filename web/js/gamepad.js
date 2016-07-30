@@ -58,12 +58,12 @@ function commandLoop () {
                     console.log("turnPower = " + turnPower)
                     console.log("drivePower = " + drivePower)
                     if (turnPower > 0) { //turn right
-                        data.valueL = drivePower * (1 - (turnPower*2)/100)
+                        data.valueL = drivePower * (1 - (turnPower*50)/100)
                         data.valueR = drivePower
                     }
                     else {
                         data.valueL = drivePower
-                        data.valueR = drivePower * (1 + (turnPower*2)/100)
+                        data.valueR = drivePower * (1 + (turnPower*50)/100)
                     }
                     data = limit(data)
                 }
