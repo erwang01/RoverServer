@@ -6,6 +6,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var Log = require("./lib/log.js")(true);
 var Arduino = require("./lib/arduino.js");
+var Pipan = require("./lib/pipan.js");
 var users = 0;
 
 app.use(express.static('web'));
@@ -76,8 +77,24 @@ io.on("connection", function(socket){
     users++;
 
     //changes camera rotation
-    socket.on("pipan", function(data) {
-        io.emit("pipan", data)
+    socket.on("pipan", function(pan) {
+        io.emit("pipan", pan)
+        if(pan.x === 1) {
+            //camera right
+            Pipan.servo_right()
+        }
+        else if(pan.x === -1) {
+            //camera left
+            Pipan.servo_left()
+        }
+        if(pan.y === 1) {
+            //camera up
+            Pipan.servo_up()
+        }
+        else if(pan.y === -1) {
+            //camera down
+            Pipan.servo_down()
+        }
     });
 
     socket.on("serialOut", function(data) {
