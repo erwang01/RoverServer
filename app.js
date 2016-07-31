@@ -79,6 +79,7 @@ io.on("connection", function(socket){
     //changes camera rotation
     socket.on("pipan", function(pan) {
         io.emit("pipan", pan)
+	Log.i(pan)
         if(pan.x === 1) {
             //camera right
             Pipan.servo_right()
@@ -103,7 +104,7 @@ io.on("connection", function(socket){
 
     socket.on("serialOut", function(data) {
         io.emit("serialOut", data)
-        Arduino.emit("serialOut", data)
+//        Arduino.emit("serialOut", data)
     });
 
     socket.on("gamepad", function(data) {

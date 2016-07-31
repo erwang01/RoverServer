@@ -71,15 +71,17 @@ function commandLoop () {
                 socket.emit("serialOut", data);
                 console.log(data)
                 */
+
                 var pan = {x:0, y:0}
                 pan.x = gamepad.buttons[20].value-gamepad.buttons[22].value
                 pan.y = gamepad.buttons[19].value-gamepad.buttons[21].value
                 socket.emit("pipan",pan)
-            }
+		console.log(pan) 
+           }
         }
     }
     if (gamepadconnected) {
-        setTimeout(commandLoop,500)
+        setTimeout(commandLoop,100)
     }
 }
 
