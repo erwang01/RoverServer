@@ -81,29 +81,29 @@ io.on("connection", function(socket){
         io.emit("pipan", pan)
         if(pan.x === 1) {
             //camera right
-            Pipan.servo_right()
             Log.i("pipan right")
+            Log.i(Pipan.servo_right())
         }
         else if(pan.x === -1) {
             //camera left
-            Pipan.servo_left()
             Log.i("pipan left")
+            Log.i(Pipan.servo_left())
         }
         if(pan.y === 1) {
             //camera up
-            Pipan.servo_up()
             Log.i("pipan up")
+            Log.i(Pipan.servo_up())
         }
         else if(pan.y === -1) {
             //camera down
-            Pipan.servo_down()
             Log.i("pipan down")
+            Log.i(Pipan.servo_down())
         }
     });
 
     socket.on("serialOut", function(data) {
         io.emit("serialOut", data)
-        Arduino.emit("serialOut", data)
+        //Arduino.emit("serialOut", data)
     });
 
     socket.on("gamepad", function(data) {
