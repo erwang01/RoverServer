@@ -5,7 +5,7 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var Log = require("./lib/log.js")(true);
-var Arduino = require("./lib/arduino.js");
+//var Arduino = require("./lib/arduino.js");
 var Pipan = require("./lib/pipan.js");
 var users = 0;
 
@@ -15,7 +15,7 @@ app.use("/node_modules", express.static('node_modules'));
 app.get('/', function(req, res){
     res.sendFile(__dirname + "/web/index.html");
 });
-
+/*
 Arduino.on("status", function(status) {
     Log.i("Status: " + status);
     io.emit("status", status);
@@ -71,7 +71,7 @@ Arduino.on("log", function(data) {
     Log.i("log: " + data);
     io.emit("log", data);
 });
-
+*/
 io.on("connection", function(socket){
     Log.d("User Connected");
     users++;
@@ -121,7 +121,7 @@ io.on("connection", function(socket){
         users --;
         if (users <2) {
             io.emit("serialOut", {valueL:0, valueR:0})
-            Arduino.emit("serialOut", {valueL:0, valueR:0})
+            //Arduino.emit("serialOut", {valueL:0, valueR:0})
         }
     });
 });

@@ -39,7 +39,7 @@ function commandLoop () {
         else if (gamepad) {
             if (gamepad.connected) {
                 gamepadconnected = true;
-                var axis = gamepad.axes;
+                /*var axis = gamepad.axes;
                 var data = {valueL: 0, valueR: 0}
                 //when switched to mode Orange with button 24, tank drive active
                 // axis 2 (throttle) is left and joystick is right.
@@ -70,7 +70,7 @@ function commandLoop () {
                 //data should be values between -1 and 1
                 socket.emit("serialOut", data);
                 console.log(data)
-
+                */
                 var pan = {x:0, y:0}
                 pan.x = gamepad.buttons[20].value-gamepad.buttons[22].value
                 pan.y = gamepad.buttons[19].value-gamepad.buttons[21].value
