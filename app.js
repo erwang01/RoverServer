@@ -82,18 +82,22 @@ io.on("connection", function(socket){
         if(pan.x === 1) {
             //camera right
             Pipan.servo_right()
+            Log.i("pipan right")
         }
         else if(pan.x === -1) {
             //camera left
             Pipan.servo_left()
+            Log.i("pipan left")
         }
         if(pan.y === 1) {
             //camera up
             Pipan.servo_up()
+            Log.i("pipan up")
         }
         else if(pan.y === -1) {
             //camera down
             Pipan.servo_down()
+            Log.i("pipan down")
         }
     });
 
