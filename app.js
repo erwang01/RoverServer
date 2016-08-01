@@ -15,7 +15,6 @@ app.use("/node_modules", express.static('node_modules'));
 app.get('/', function(req, res){
     res.sendFile(__dirname + "/web/index.html");
 });
-/*
 Arduino.on("status", function(status) {
     Log.i("Status: " + status);
     io.emit("status", status);
@@ -71,9 +70,8 @@ Arduino.on("log", function(data) {
     Log.i("log: " + data);
     io.emit("log", data);
 });
-*/
 io.on("connection", function(socket){
-    Log.d("User Connected");
+    Log.d("User Connected:" + socket.id);
     users++;
 
     //changes camera rotation
@@ -103,7 +101,7 @@ io.on("connection", function(socket){
 
     socket.on("serialOut", function(data) {
         io.emit("serialOut", data)
-        //Arduino.emit("serialOut", data)
+        Arduino.emit("serialOut", data)
     });
 
     socket.on("gamepad", function(data) {
@@ -117,11 +115,11 @@ io.on("connection", function(socket){
     */
 
     socket.on("disconnect", function(){
-        Log.d("User Disconnected");
+        Log.d("User Disconnected:" + socket.id);
         users --;
-        if (users <2) {
+        if (users < 2) {
             io.emit("serialOut", {valueL:0, valueR:0})
-            //Arduino.emit("serialOut", {valueL:0, valueR:0})
+            Arduino.emit("serialOut", {valueL:0, valueR:0})
         }
     });
 });
