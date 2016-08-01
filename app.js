@@ -15,7 +15,6 @@ app.use("/node_modules", express.static('node_modules'));
 app.get('/', function(req, res){
     res.sendFile(__dirname + "/web/index.html");
 });
-/*
 Arduino.on("status", function(status) {
     Log.i("Status: " + status);
     io.emit("status", status);
@@ -71,9 +70,8 @@ Arduino.on("log", function(data) {
     Log.i("log: " + data);
     io.emit("log", data);
 });
-*/
 io.on("connection", function(socket){
-    Log.d("User Connected");
+    Log.d("User Connected:" + socket.id);
     users++;
 
     //changes camera rotation
@@ -82,23 +80,23 @@ io.on("connection", function(socket){
 	Log.i(pan)
         if(pan.x === 1) {
             //camera right
-            Pipan.servo_right()
             Log.i("pipan right")
+            Log.i(Pipan.servo_right())
         }
         else if(pan.x === -1) {
             //camera left
-            Pipan.servo_left()
             Log.i("pipan left")
+            Log.i(Pipan.servo_left())
         }
         if(pan.y === 1) {
             //camera up
-            Pipan.servo_up()
             Log.i("pipan up")
+            Log.i(Pipan.servo_up())
         }
         else if(pan.y === -1) {
             //camera down
-            Pipan.servo_down()
             Log.i("pipan down")
+            Log.i(Pipan.servo_down())
         }
     });
 
@@ -118,11 +116,11 @@ io.on("connection", function(socket){
     */
 
     socket.on("disconnect", function(){
-        Log.d("User Disconnected");
+        Log.d("User Disconnected:" + socket.id);
         users --;
-        if (users <2) {
+        if (users < 2) {
             io.emit("serialOut", {valueL:0, valueR:0})
-            //Arduino.emit("serialOut", {valueL:0, valueR:0})
+            Arduino.emit("serialOut", {valueL:0, valueR:0})
         }
     });
 });
